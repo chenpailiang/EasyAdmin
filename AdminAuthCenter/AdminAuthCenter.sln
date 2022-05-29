@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminAuthCenter", "AdminAuthCenter.csproj", "{F94B43C9-F91E-4C48-BEE3-BC3D165C4C9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F94B43C9-F91E-4C48-BEE3-BC3D165C4C9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F94B43C9-F91E-4C48-BEE3-BC3D165C4C9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F94B43C9-F91E-4C48-BEE3-BC3D165C4C9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F94B43C9-F91E-4C48-BEE3-BC3D165C4C9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4B58296-12D1-4584-BA92-72BE003B7E9B}
+	EndGlobalSection
+EndGlobal
