@@ -1,5 +1,4 @@
 using EasyAdmin.Utilitys;
-using EasyService.Mapper;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -76,11 +75,11 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger(op => { op.RouteTemplate = "api/swagger/{documentName}/swagger.json"; });
     app.UseSwaggerUI(op =>
     {
-        op.SwaggerEndpoint("/swagger/easybuy/swagger.json", $"{currentAssemblyName} Docs");
-        op.RoutePrefix = "swagger";
+        op.SwaggerEndpoint("/api/swagger/easybuy/swagger.json", $"{currentAssemblyName} Docs");
+        op.RoutePrefix = "api/swagger";
     });
 }
 app.UseCors("easybuy");

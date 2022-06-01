@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EasyEntity;
+namespace EasyCommon;
 
 /// <summary>
 /// 
@@ -16,7 +16,7 @@ public class DbContext
     {
         ConfigId = "admin",
         DbType = SqlSugar.DbType.MySql,
-        ConnectionString = "Server=localhost;Uid=root;Database=easy_admin;Pwd=123456;Max Pool Size=75; Min Pool Size=5;",
+        ConnectionString = "Server=localhost;Uid=root;Database=easyadmin;Pwd=123456;Max Pool Size=75; Min Pool Size=5;",
         IsAutoCloseConnection = true,
     },
          db =>
@@ -28,10 +28,8 @@ public class DbContext
                  Console.WriteLine(string.Join(",", pars?.Select(it => it.ParameterName + ":" + it.Value)));//参数
              };
          });
-    
+
 }
-
-
 public class AdminEntity
 {
     public static readonly SqlSugarProvider db = DbContext.Db.GetConnection("admin");
@@ -46,5 +44,5 @@ public class OrderEntity
 {
 
     public readonly SqlSugarProvider db = DbContext.Db.GetConnection("order");
-    
+
 }

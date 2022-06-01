@@ -1,22 +1,11 @@
 ﻿using System.Security.Claims;
+using EasyCommon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 
 namespace EasyAdmin.Utilitys;
-
-/// <summary>
-/// 所有权限Id
-/// </summary>
-public enum AuthEnum : uint
-{
-    at101 = 101,
-    at102 = 102,
-    at103 = 103,
-
-    sup = 999
-}
 
 [AttributeUsage(AttributeTargets.Method)]
 public class AuthSetAttribute : Attribute

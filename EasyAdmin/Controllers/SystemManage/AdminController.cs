@@ -4,6 +4,7 @@ using EasyAdmin.Utilitys;
 using EasyService.Service;
 using EasyService.Request;
 using EasyService.Response;
+using EasyCommon;
 
 namespace EasyAdmin.Controllers;
 
@@ -27,6 +28,7 @@ public class AdminController : BaseController
     /// 获取所有用户
     /// </summary>
     /// <returns></returns>
+    [AuthSet(AuthEnum.at100)]
     [HttpGet, Route("")]
     public ActionResult<List<AdminDto>> Get()
     {
@@ -50,7 +52,8 @@ public class AdminController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPost, Route(""), AuthSet(AuthEnum.at103)]
+    [AuthSet(AuthEnum.at100)]
+    [HttpPost, Route("")]
     public ActionResult AddAdmin(AddAdminReq req)
     {
         var res = adminService.AddAdmin(req);

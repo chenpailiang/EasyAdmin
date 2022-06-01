@@ -24,6 +24,9 @@ public class SystemManageProfile : Profile
 
         #region 菜单管理
 
+        CreateMap<Menu, RoleMenuRsp.MenuDto>()
+            .ForPath(to => to.meta.title, from => from.MapFrom(f => f.title))
+            .ForPath(to => to.meta.icon, from => from.MapFrom(f => f.icon));
         #endregion
 
         #region 角色管理

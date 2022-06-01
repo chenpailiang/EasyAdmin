@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SqlSugar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,36 +14,42 @@ namespace AdminAuthCenter
         public string pwd { get; set; }
         public string memo { get; set; }
 
-        [SqlSugar.SugarColumn(IsJson = true)]
+        [SugarColumn(IsJson = true)]
         public List<int> roles { get; set; }
         public bool oust { get; set; }
     }
 
     public class Menu
     {
-        public int id { get; set; }
-        public int parentId { get; set; }
-        public string name { get; set; }
-        public string path { get; set; }
-        public bool oust { get; set; }
+        public int id { get; init; }
+        public int parentId { get; private set; }
+        public string name { get; private set; }
+        public string title { get; private set; }
+        public string icon { get; private set; }
+        public string path { get; private set; }
+        public string component { get; private set; }
+        public string redirect { get; private set; }
+        public bool oust { get; private set; }
     }
 
     public class MenuFunc
     {
-        public int id { get; set; }
-        public int menuId { get; set; }
-        public string elId { get; set; }
-        public string name { get; set; }
-        public string icon { get; set; }
-        public bool oust { get; set; }
+        public int id { get; init; }
+        public int menuId { get; private set; }
+        public string symbol { get; private set; }
+        public int authId { get; private set; }
+        public bool oust { get; private set; }
     }
 
     public class Role
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public string memo { get; set; }
-        public List<int> menus { get; set; }
-        public List<int> funcs { get; set; }
+        public int role { get; set; }
+
+        [SugarColumn(IsJson = true)]
+        public List<int> menus { get; private set; }
+
+        [SugarColumn(IsJson = true)]
+        public List<int> funcs { get; private set; }
+        public bool oust { get; private set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasyCommon;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,8 +11,7 @@ public class MenuFunc : AdminEntity
 {
     public int id { get; init; }
     public int menuId { get; private set; }
-    public string elId { get; private set; }
-    public string name { get; private set; }
-    public string icon { get; private set; }
+    public string symbol { get; private set; }
+    public int authId { get; private set; }
     public bool oust { get; private set; }
 }
