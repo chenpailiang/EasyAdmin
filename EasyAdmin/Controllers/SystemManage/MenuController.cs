@@ -11,10 +11,12 @@ namespace EasyAdmin.Controllers;
 public class MenuController : BaseController
 {
     #region 构造
-    private MenuService menuService;
-    public MenuController(MenuService menuService)
+    private readonly MenuService menuService;
+    private readonly ScopeHttpContext httpContext;
+    public MenuController(MenuService menuService, ScopeHttpContext httpContext)
     {
         this.menuService = menuService;
+        this.httpContext = httpContext;
     }
     #endregion
 
@@ -25,7 +27,7 @@ public class MenuController : BaseController
     [HttpGet, Route("admin")]
     public ActionResult<RoleMenuRsp> GetMenus()
     {
-        return menuService.GetMenus(contextAdminId);
+        return menuService.GetMenus(httpContext.currentAdminId);
     }
 
     /// <summary>

@@ -1,9 +1,22 @@
 using EasyAdmin.Utilitys;
+using EasyCommon;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddJwtAuthSetup(builder.Configuration);
+
+builder.Services.AddRouting(op => op.LowercaseUrls = true);
+builder.Services.AddControllers(x =>
+{
+    x.Filters.Add<AuthCheckFilter>(); // 鉴权
+    x.Filters.Add<GlobalExceptionFilter>(); // 全局异常过滤
+});
+builder.Services.AddEndpointsApiExplorer();
+
 // 跨域
 builder.Services.AddCors(opt =>
 {
@@ -14,16 +27,6 @@ builder.Services.AddCors(opt =>
         builder.AllowAnyOrigin();
     });
 });
-
-// Add services to the container.
-builder.Services.AddJwtAuthSetup(builder.Configuration);
-
-builder.Services.AddControllers(x =>
-{
-    x.Filters.Add<AuthCheckFilter>(); // 鉴权
-    x.Filters.Add<GlobalExceptionFilter>(); // 全局异常过滤
-});
-builder.Services.AddEndpointsApiExplorer();
 
 var currentAssembly = Assembly.GetExecutingAssembly();
 
@@ -69,17 +72,18 @@ foreach (var item in typeof(EasyService.BaseService).Assembly.GetTypes().Where(x
 {
     builder.Services.AddScoped(item);
 }
+builder.Services.AddScoped<ScopeHttpContext>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(op => { op.RouteTemplate = "api/swagger/{documentName}/swagger.json"; });
+    app.UseSwagger(op => { op.RouteTemplate = "swagger/{documentName}/swagger.json"; });
     app.UseSwaggerUI(op =>
     {
-        op.SwaggerEndpoint("/api/swagger/easybuy/swagger.json", $"{currentAssemblyName} Docs");
-        op.RoutePrefix = "api/swagger";
+        op.SwaggerEndpoint("/swagger/easybuy/swagger.json", $"{currentAssemblyName} Docs");
+        op.RoutePrefix = "swagger";
     });
 }
 app.UseCors("easybuy");

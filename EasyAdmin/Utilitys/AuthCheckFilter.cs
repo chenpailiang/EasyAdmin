@@ -10,8 +10,8 @@ namespace EasyAdmin.Utilitys;
 [AttributeUsage(AttributeTargets.Method)]
 public class AuthSetAttribute : Attribute
 {
-    public int authId;
-    public AuthSetAttribute(AuthEnum auth = AuthEnum.sup)
+    public int authId = (int)RoleEnum.超级管理员; // 默认需要超级权限
+    public AuthSetAttribute(AuthEnum auth)
     {
         authId = (int)auth;
     }

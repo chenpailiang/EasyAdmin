@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace EasyCommon;
 
-
 /// <summary>
 /// 所有权限Id
 /// </summary>
@@ -26,7 +25,4 @@ public enum AuthEnum : uint
     at140 = 140,
     at141 = 141,
     at142 = 142,
-
-    // 超级权限
-    sup = 999
 }

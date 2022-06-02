@@ -8,11 +8,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyAdmin", "EasyAdmin.cspr
 		{6E994BC0-DF61-4A69-A087-239A6F8136A6} = {6E994BC0-DF61-4A69-A087-239A6F8136A6}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{441A8E1F-B8BA-434D-92EC-0AA1AFCCE17B}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyEntity", "..\EasyEntity\EasyEntity.csproj", "{8E64B888-5E0F-4913-B5CF-D49F5A2F3E41}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyCommon", "..\EasyCommon\EasyCommon.csproj", "{F444140D-6932-42C9-B4F8-0735572E00E4}"
