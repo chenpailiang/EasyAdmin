@@ -11,9 +11,9 @@ namespace EasyAdmin.Utilitys;
 public class AuthSetAttribute : Attribute
 {
     public int authId = (int)RoleEnum.超级管理员; // 默认需要超级权限
-    public AuthSetAttribute(AuthEnum auth)
+    public AuthSetAttribute(AuthEnum auth = 0)
     {
-        authId = (int)auth;
+        if (auth > 0) authId = (int)auth;
     }
 }
 /// <summary>
@@ -34,7 +34,7 @@ public class AuthCheckFilter : IAuthorizationFilter
                     var role = context.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role);
                     var authIds = role.Select(x => int.Parse(x.Value));
                     var req_authId = int.Parse(context.HttpContext.Request.Headers["aid"]);
-                    if (req_authId != authSet.authId || !authIds.Any(x => x == (int)AuthEnum.sup || x == req_authId))
+                    if (req_authId != authSet.authId || !authIds.Any(x => x == (int)RoleEnum.超级管理员 || x == req_authId))
                     {
                         context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
                         context.Result = new EmptyResult();

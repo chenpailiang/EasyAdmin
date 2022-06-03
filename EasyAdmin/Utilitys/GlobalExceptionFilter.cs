@@ -19,6 +19,11 @@ public class GlobalExceptionFilter : IExceptionFilter
             context.Result = new ObjectResult(bad.Message);
             context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
         }
+        if (context.Exception is UnauthorizedAccessException noAuth)
+        {
+            context.Result = new ObjectResult(noAuth.Message);
+            context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+        }
         else
         {
             context.Result = new ObjectResult("服务器异常 " + context.Exception.Message);

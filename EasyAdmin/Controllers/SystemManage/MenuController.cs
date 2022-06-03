@@ -12,11 +12,10 @@ public class MenuController : BaseController
 {
     #region 构造
     private readonly MenuService menuService;
-    private readonly ScopeHttpContext httpContext;
-    public MenuController(MenuService menuService, ScopeHttpContext httpContext)
+    //private readonly ScopeHttpContext httpContext;
+    public MenuController(MenuService menuService)
     {
         this.menuService = menuService;
-        this.httpContext = httpContext;
     }
     #endregion
 
@@ -27,7 +26,7 @@ public class MenuController : BaseController
     [HttpGet, Route("admin")]
     public ActionResult<RoleMenuRsp> GetMenus()
     {
-        return menuService.GetMenus(httpContext.currentAdminId);
+        return menuService.GetMenus(CurrentHttpContext.currentAdminId);
     }
 
     /// <summary>

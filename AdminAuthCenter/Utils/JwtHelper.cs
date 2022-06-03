@@ -42,7 +42,7 @@ namespace AdminAuthCenter.Utils
             };
             var roles = claims.Where(x => x.Type == ClaimTypes.Role);
             if (roles.Any())
-                user.roles = roles.Select(x => int.Parse(x.Value)).ToList();
+                user.roles = roles.Select(x => int.Parse(x.Value)).ToList(); //TODO 具体权限
             return GenerateJwt(user, configuration, false); //生成新token
         }
         /// <summary>

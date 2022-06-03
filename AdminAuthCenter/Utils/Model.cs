@@ -12,7 +12,6 @@ namespace AdminAuthCenter
         public string account { get; set; }
         public string name { get; set; }
         public string pwd { get; set; }
-        public string memo { get; set; }
 
         [SugarColumn(IsJson = true)]
         public List<int> roles { get; set; }

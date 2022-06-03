@@ -41,7 +41,7 @@ public class AdminController : BaseController
     /// </summary>
     /// <param name="id">”√ªßid</param>
     /// <returns></returns>
-    [HttpGet, Route("{id}"), AuthSet()]
+    [HttpGet, Route("{id}"), AuthSet]
     public ActionResult<AdminDto> Get(int id)
     {
         return adminService.Get(id);

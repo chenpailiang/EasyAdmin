@@ -7,7 +7,6 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddJwtAuthSetup(builder.Configuration);
 
 builder.Services.AddRouting(op => op.LowercaseUrls = true);
 builder.Services.AddControllers(x =>
@@ -27,6 +26,7 @@ builder.Services.AddCors(opt =>
         builder.AllowAnyOrigin();
     });
 });
+builder.Services.AddJwtAuthSetup(builder.Configuration);
 
 var currentAssembly = Assembly.GetExecutingAssembly();
 
@@ -72,7 +72,6 @@ foreach (var item in typeof(EasyService.BaseService).Assembly.GetTypes().Where(x
 {
     builder.Services.AddScoped(item);
 }
-builder.Services.AddScoped<ScopeHttpContext>();
 
 var app = builder.Build();
 
@@ -91,5 +90,7 @@ app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
+
+app.UseMiddleware<HttpContextMiddleware>();
 
 app.Run();

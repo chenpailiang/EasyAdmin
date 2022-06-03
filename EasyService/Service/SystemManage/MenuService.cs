@@ -23,7 +23,7 @@ public class MenuService : BaseService
     {
         var roleIds = Admin.db.Queryable<Admin>().First(x => x.id == adminId).roles;
         RoleMenuRsp rsp = new();
-        if (roleIds.Contains((int)AuthEnum.sup))
+        if (roleIds.Contains((int)RoleEnum.超级管理员))
         {
             var menus = Menu.db.Queryable<Menu>().ToList();
             rsp.menus = mapper.Map<List<RoleMenuRsp.MenuDto>>(menus);
