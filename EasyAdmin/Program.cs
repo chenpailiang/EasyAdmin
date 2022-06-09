@@ -68,7 +68,7 @@ builder.Services.AddSwaggerGen(s =>
 builder.Services.AddAutoMapper();
 
 // services×¢Èë
-foreach (var item in typeof(EasyService.BaseService).Assembly.GetTypes().Where(x => x.BaseType == typeof(EasyService.BaseService)))
+foreach (var item in typeof(EasyService.Service.AdminService).Assembly.GetTypes().Where(x => x.Name.EndsWith("Service")))
 {
     builder.Services.AddScoped(item);
 }

@@ -14,9 +14,12 @@ public class HttpContextMiddleware
 
     public async Task Invoke(HttpContext httpContext)
     {
-        int id = int.Parse(httpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
-        string account = httpContext.User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
-        CurrentHttpContext.Init(id, account);
+        if (httpContext.User.Claims.Any())
+        {
+            int id = int.Parse(httpContext.User.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+            string account = httpContext.User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+            CurrentHttpContext.Init(id, account);
+        }
         await _next(httpContext);
     }
 }

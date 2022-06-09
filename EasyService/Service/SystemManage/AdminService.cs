@@ -1,11 +1,12 @@
-﻿using AutoMapper;
+﻿global using static EasyCommon.Utility;
+using AutoMapper;
 using EasyEntity.Entity;
 using EasyService.Response;
 using EasyService.Request;
 
 namespace EasyService.Service;
 
-public class AdminService : BaseService
+public class AdminService
 {
     private readonly IMapper imapper;
     public AdminService(IMapper imapper)

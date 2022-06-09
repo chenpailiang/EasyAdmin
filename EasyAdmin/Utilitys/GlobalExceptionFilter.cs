@@ -1,4 +1,5 @@
-﻿using EasyService;
+﻿using EasyCommon;
+using EasyService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 namespace EasyAdmin.Utilitys;

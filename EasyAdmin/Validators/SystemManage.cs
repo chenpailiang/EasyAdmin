@@ -4,21 +4,60 @@ using FluentValidation;
 namespace EasyAdmin.Validators;
 
 
-#region 菜单管理
+#region 菜单/功能管理
 
-public class AddMenuReqValidator : AbstractValidator<AddMenuReq>
+/// <summary>
+/// 新增菜单
+/// </summary>
+public class AddMenuValidator : AbstractValidator<AddMenuReq>
 {
-    public AddMenuReqValidator()
+    public AddMenuValidator()
     {
-        RuleFor(x => x.name).MaximumLength(20); 
-        RuleFor(x => x.title).MaximumLength(20);
-        RuleFor(x => x.icon).MaximumLength(20);
-        RuleFor(x => x.path).MaximumLength(50);
-        RuleFor(x => x.component).MaximumLength(50);
-        RuleFor(x => x.redirect).MaximumLength(50);
+        RuleFor(x => x.name).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.title).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.icon).NotEmpty().MaximumLength(20).When(x => x.icon != null);
     }
 }
 
+/// <summary>
+/// 编辑菜单
+/// </summary>
+public class EditMenuValidator : AbstractValidator<EditMenuReq>
+{
+    public EditMenuValidator(AddMenuValidator addMenuValidator)
+    {
+        Include(addMenuValidator);
+        RuleFor(x => x.id).GreaterThan(0);
+    }
+}
+
+/// <summary>
+/// 新增功能
+/// </summary>
+public class AddFuncValidator : AbstractValidator<AddFuncReq>
+{
+    public AddFuncValidator()
+    {
+        RuleFor(x => x.menuId).GreaterThan(0);
+        RuleFor(x => x.name).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.symbol).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.authId).InclusiveBetween(100, 99999);
+    }
+}
+
+/// <summary>
+/// 新增功能
+/// </summary>
+public class EditFuncValidator : AbstractValidator<EditFuncReq>
+{
+    public EditFuncValidator()
+    {
+        RuleFor(x => x.id).GreaterThan(0);
+        RuleFor(x => x.name).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.symbol).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.authId).InclusiveBetween(100, 99999);
+    }
+}
 #endregion
 
 #region 用户管理

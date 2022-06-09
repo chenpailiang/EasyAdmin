@@ -25,4 +25,8 @@ public enum AuthEnum : uint
     at140 = 140,
     at141 = 141,
     at142 = 142,
+    at143 = 143,
+    at144 = 144,
+    at145 = 145,
+    at146 = 146,
 }

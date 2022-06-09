@@ -1,16 +1,35 @@
 ﻿namespace EasyService.Request;
 
-#region 菜单管理
+#region 菜单/功能管理
 
 public class AddMenuReq
 {
     public int parentId { get; set; }
     public string name { get; set; }
-    public string? path { get; set; }
-    public string? component { get; set; }
-    public string? redirect { get; set; }
     public string title { get; set; }
     public string? icon { get; set; }
+    public int sort { get; set; }
+}
+
+public class EditMenuReq : AddMenuReq
+{
+    public int id { get; set; }
+}
+
+public class AddFuncReq
+{
+    public int menuId { get; set; }
+    public string name { get; set; }
+    public string symbol { get; set; }
+    public int authId { get; set; }
+}
+
+public class EditFuncReq
+{
+    public int id { get; set; }
+    public string name { get; set; }
+    public string symbol { get; set; }
+    public int authId { get; set; }
 }
 
 #endregion

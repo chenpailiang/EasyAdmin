@@ -5,3 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace EasyCommon;
+
+public class BadRequestException : Exception
+{
+    public BadRequestException(string msg) : base(msg)
+    {
+
+    }
+}

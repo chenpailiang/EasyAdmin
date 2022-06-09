@@ -15,7 +15,6 @@ public class Admin : AdminEntity
 
     [SugarColumn(IsJson = true)]
     public List<int> roles { get; private set; }
-    public bool oust { get; private set; }
 
     public static Admin Get(int id)
     {

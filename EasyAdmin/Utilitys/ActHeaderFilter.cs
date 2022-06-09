@@ -22,7 +22,7 @@ public class ActHeaderFilter : IOperationFilter
             if (operation.Parameters == null)
                 operation.Parameters = new List<OpenApiParameter>();
 
-            operation.Description = "aid = "+ (int)((AuthSetAttribute)authset).authId;
+            //operation.Description = "aid = "+ (int)((AuthSetAttribute)authset).authId;
             operation.Parameters.Add(new OpenApiParameter
             {
                 Name = "aid",

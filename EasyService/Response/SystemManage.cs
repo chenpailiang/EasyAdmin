@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasyService.Response;
 
-public class AdminDto
+public class AdminDto : BaseDto
 {
     public int id { get; set; }
     public string account { get; set; }
@@ -15,10 +15,30 @@ public class AdminDto
     public List<string> roles { get; set; }
 }
 
+
+#region 菜单管理
+
+public class MenuDto : BaseDto
+{
+    public int id { get; set; }
+    public int parentId { get; set; }
+    public string name { get; set; }
+    public string title { get; set; }
+    public string? icon { get; set; }
+    public int sort { get; set; }
+}
+public class FuncDto : BaseDto
+{
+    public int id { get; init; }
+    public int menuId { get; private set; }
+    public string name { get; private set; }
+    public string symbol { get; private set; }
+}
+
 /// <summary>
-/// 用户有权限的菜单
+/// 菜单+功能按钮
 /// </summary>
-public class RoleMenuRsp
+public class MenuRsp
 {
     /// <summary>
     /// 菜单集合
@@ -28,26 +48,6 @@ public class RoleMenuRsp
     /// 按钮集合
     /// </summary>
     public List<FuncDto> funcs { get; set; }
-    public class MenuDto
-    {
-        public int id { get; set; }
-        public int parentId { get; set; }
-        public string name { get; set; }
-        public string path { get; set; }
-        public string component { get; set; }
-        public string redirect { get; set; }
-        public Meta meta { get; set; }
-        public class Meta
-        {
-            public string title { get; set; }
-            public string icon { get; set; }
-        }
-    }
-    public class FuncDto
-    {
-        public int menuId { get; set; }
-        public string symbol { get; set; }
-    }
 }
 
 public class RoleDto
@@ -58,3 +58,5 @@ public class RoleDto
     public List<int> menus { get; set; }
     public List<int> funcs { get; set; }
 }
+
+#endregion

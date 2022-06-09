@@ -10,11 +10,8 @@ namespace EasyEntity.Entity;
 
 public class Role : AdminEntity
 {
-    [SugarColumn(IsPrimaryKey = true)]
-    public RoleEnum role { get; set; }
-
-    [SugarColumn(IsIgnore = true)]
-    public string name { get => role.ToString(); }
+    public int id { get; init; }
+    public string name { get; private set; }
     public string memo { get; private set; }
 
     [SugarColumn(IsJson = true)]

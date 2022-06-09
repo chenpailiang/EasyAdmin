@@ -12,6 +12,8 @@ public class SystemManageProfile : Profile
 {
     public SystemManageProfile()
     {
+        this.ClearPrefixes();
+
         #region 用户管理
 
         CreateMap<AddAdminReq, Admin>();
@@ -24,9 +26,17 @@ public class SystemManageProfile : Profile
 
         #region 菜单管理
 
-        CreateMap<Menu, RoleMenuRsp.MenuDto>()
-            .ForPath(to => to.meta.title, from => from.MapFrom(f => f.title))
-            .ForPath(to => to.meta.icon, from => from.MapFrom(f => f.icon));
+        CreateMap<AddMenuReq, Menu>();
+
+        CreateMap<EditMenuReq, Menu>();
+
+        CreateMap<Menu, MenuDto>();
+
+        CreateMap<MenuFunc, FuncDto>();
+
+        CreateMap<AddFuncReq, MenuFunc>();
+
+        CreateMap<EditFuncReq, MenuFunc>();
         #endregion
 
         #region 角色管理
