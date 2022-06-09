@@ -39,7 +39,7 @@ namespace AdminAuthCenter.Controllers
         [HttpPost]
         public ActionResult Login([FromBody] LoginModel user)
         {
-            var admin = db.Queryable<Admin>().First(x => x.account == user.account && x.pwd == user.pwd && !x.oust);
+            var admin = db.Queryable<Admin>().First(x => x.account == user.account && x.pwd == user.pwd && x.oust == 0);
             if (admin == null)
                 return Ok(new BaseReult { error = "ÕËºÅ»òÃÜÂë´íÎó£¬µÇÂ¼Ê§°ÜÇëÖØÊÔ" });
             var token = JwtHelper.GenerateJwt(admin, configuration);

@@ -15,40 +15,32 @@ namespace AdminAuthCenter
 
         [SugarColumn(IsJson = true)]
         public List<int> roles { get; set; }
-        public bool oust { get; set; }
+        public int oust { get; set; }
     }
 
     public class Menu
     {
         public int id { get; init; }
-        public int parentId { get; private set; }
-        public string name { get; private set; }
-        public string title { get; private set; }
-        public string icon { get; private set; }
-        public string path { get; private set; }
-        public string component { get; private set; }
-        public string redirect { get; private set; }
-        public bool oust { get; private set; }
+        public int oust { get; private set; }
     }
 
     public class MenuFunc
     {
         public int id { get; init; }
         public int menuId { get; private set; }
-        public string symbol { get; private set; }
         public int authId { get; private set; }
-        public bool oust { get; private set; }
+        public int oust { get; private set; }
     }
 
     public class Role
     {
-        public int role { get; set; }
+        public int id { get; set; }
 
         [SugarColumn(IsJson = true)]
         public List<int> menus { get; private set; }
 
         [SugarColumn(IsJson = true)]
         public List<int> funcs { get; private set; }
-        public bool oust { get; private set; }
+        public int oust { get; private set; }
     }
 }
