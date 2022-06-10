@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasyService.Response;
 
-public class AdminDto : BaseDto
+public class AdminDto
 {
     public int id { get; set; }
     public string account { get; set; }
@@ -18,21 +18,35 @@ public class AdminDto : BaseDto
 
 #region 菜单管理
 
-public class MenuDto : BaseDto
+public class MenuDto
 {
     public int id { get; set; }
     public int parentId { get; set; }
+    /// <summary>
+    /// 菜单名称
+    /// </summary>
     public string name { get; set; }
-    public string title { get; set; }
+    /// <summary>
+    /// 菜单编码
+    /// </summary>
+    public string symbol { get; set; }
+    /// <summary>
+    /// 图标
+    /// </summary>
     public string? icon { get; set; }
+    /// <summary>
+    /// 页面地址
+    /// </summary>
+    public string? path { get; set; }
     public int sort { get; set; }
 }
-public class FuncDto : BaseDto
+public class FuncDto
 {
     public int id { get; init; }
     public int menuId { get; private set; }
     public string name { get; private set; }
     public string symbol { get; private set; }
+    public string description { get; private set; }
 }
 
 /// <summary>

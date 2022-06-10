@@ -61,7 +61,8 @@ builder.Services.AddSwaggerGen(s =>
     s.OperationFilter<ActHeaderFilter>();
     s.OrderActionsBy(x => x.RelativePath);
     var basePath = AppDomain.CurrentDomain.BaseDirectory;
-    s.IncludeXmlComments($"{basePath}apicomment.xml", true);
+    s.IncludeXmlComments($"{basePath}EasyAdmin.xml", true);
+    s.IncludeXmlComments($"{basePath}EasyService.xml", true);
 });
 
 // automapper×¢Èë

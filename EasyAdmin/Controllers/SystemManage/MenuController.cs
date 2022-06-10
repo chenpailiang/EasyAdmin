@@ -35,10 +35,10 @@ public class MenuController : BaseController
     /// 查询菜单列表
     /// </summary>
     /// <returns></returns>
-    [HttpGet, Route("{title?}"), AuthSet(AuthEnum.at140)]
-    public ActionResult<MenuRsp> GetMenus(string? title)
+    [HttpGet, Route("{name?}"), AuthSet(AuthEnum.at140)]
+    public ActionResult<MenuRsp> GetMenus(string? name)
     {
-        return Ok(menuService.GetMenus(title));
+        return Ok(menuService.GetMenus(name));
     }
 
     /// <summary>

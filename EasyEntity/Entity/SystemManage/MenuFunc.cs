@@ -12,6 +12,7 @@ public class MenuFunc : AdminEntity
     public int id { get; init; }
     public int menuId { get; private set; }
     public string name { get; private set; }
+    public string description { get; private set; }
     public string symbol { get; private set; }
     public int authId { get; private set; }
 
@@ -20,8 +21,8 @@ public class MenuFunc : AdminEntity
     /// </summary>
     public void Create()
     {
-        if (db.Queryable<MenuFunc>().Any(x => x.menuId == this.menuId && x.name == this.name))
-            throw BadRequestExp("功能名称已存在");
+        if (db.Queryable<MenuFunc>().Any(x => x.menuId == this.menuId && x.symbol == this.symbol))
+            throw BadRequestExp("功能已存在");
         this.creator = this.updator = CurrentHttpContext.currentAdminAccount;
         db.Insertable(this).ExecuteCommand();
     }
@@ -31,11 +32,11 @@ public class MenuFunc : AdminEntity
     /// </summary>
     public void Update()
     {
-        var menus = db.Queryable<MenuFunc>().Where(x => x.id == this.id || x.menuId == this.menuId && x.name == this.name).ToList();
+        var menus = db.Queryable<MenuFunc>().Where(x => x.id == this.id || x.menuId == this.menuId && x.symbol == this.symbol).ToList();
         if (!menus.Any(x => x.id == this.id))
             throw BadRequestExp("功能不存在");
         if (menus.Count > 1)
-            throw BadRequestExp("功能名称已存在");
+            throw BadRequestExp("功能已存在");
         this.updator = CurrentHttpContext.currentAdminAccount;
         db.Updateable(this).ExecuteCommand();
     }

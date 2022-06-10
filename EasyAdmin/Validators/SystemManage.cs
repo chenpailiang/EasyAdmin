@@ -14,7 +14,7 @@ public class AddMenuValidator : AbstractValidator<AddMenuReq>
     public AddMenuValidator()
     {
         RuleFor(x => x.name).NotEmpty().MaximumLength(20);
-        RuleFor(x => x.title).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.symbol).NotEmpty().MaximumLength(20);
         RuleFor(x => x.icon).NotEmpty().MaximumLength(20).When(x => x.icon != null);
     }
 }

@@ -39,10 +39,10 @@ public class MenuService
     /// 获取菜单列表
     /// </summary>
     /// <returns></returns>
-    public MenuRsp GetMenus(string? title = null)
+    public MenuRsp GetMenus(string? name = null)
     {
         MenuRsp rsp = new();
-        var menus = Menu.db.Queryable<Menu>().WhereIF(!title.Nil(), x => x.title.Contains(title!)).ToList();
+        var menus = Menu.db.Queryable<Menu>().WhereIF(!name.Nil(), x => x.name.Contains(name!)).ToList();
         rsp.menus = mapper.Map<List<MenuDto>>(menus);
         var funcs = MenuFunc.db.Queryable<MenuFunc>().ToList();
         rsp.funcs = mapper.Map<List<FuncDto>>(funcs);

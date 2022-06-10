@@ -6,8 +6,9 @@ public class AddMenuReq
 {
     public int parentId { get; set; }
     public string name { get; set; }
-    public string title { get; set; }
+    public string symbol { get; set; }
     public string? icon { get; set; }
+    public string? path { get; set; }
     public int sort { get; set; }
 }
 
@@ -22,6 +23,7 @@ public class AddFuncReq
     public string name { get; set; }
     public string symbol { get; set; }
     public int authId { get; set; }
+    public string description { get; set; }
 }
 
 public class EditFuncReq
@@ -30,6 +32,7 @@ public class EditFuncReq
     public string name { get; set; }
     public string symbol { get; set; }
     public int authId { get; set; }
+    public string description { get; set; }
 }
 
 #endregion

@@ -13,8 +13,9 @@ public class Menu : AdminEntity
     public int id { get; init; }
     public int parentId { get; private set; }
     public string name { get; private set; }
-    public string title { get; private set; }
+    public string symbol { get; private set; }
     public string? icon { get; private set; }
+    public string? path { get; private set; }
     public int sort { get; private set; }
 
     /// <summary>
@@ -33,7 +34,7 @@ public class Menu : AdminEntity
     /// </summary>
     public void Update()
     {
-        var menus = db.Queryable<Menu>().Where(x => x.id == this.id || x.parentId == this.parentId && x.title == this.title).ToList();
+        var menus = db.Queryable<Menu>().Where(x => x.id == this.id || x.parentId == this.parentId && x.name == this.name).ToList();
         if (!menus.Any(x => x.id == this.id))
             throw BadRequestExp("菜单不存在");
         if (menus.Count > 1)
