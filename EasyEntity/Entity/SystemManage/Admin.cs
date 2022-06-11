@@ -1,6 +1,7 @@
 ﻿
 using EasyCommon;
 using SqlSugar;
+using System.Text;
 
 namespace EasyEntity.Entity;
 
@@ -14,10 +15,62 @@ public class Admin : AdminEntity
     public string memo { get; private set; }
 
     [SugarColumn(IsJson = true)]
-    public List<int> roles { get; private set; }
+    public List<int>? roles { get; private set; }
 
-    public static Admin Get(int id)
+    /// <summary>
+    /// 新增
+    /// </summary>
+    public void Create()
     {
-        return db.Queryable<Admin>().First(x => x.id == id);
+        if (db.Queryable<Admin>().Any(x => x.account == this.account))
+            throw BadRequestExp("账号已存在");
+        var letters = "qwertyuiopasdfghjklzxcvbnm";
+        var nums = "1234567890";
+        var chars = ",./!@#$&-+";
+        var sb = new StringBuilder();
+        var rand = new Random();
+        for (int i = 0; i < 5; i++)
+        {
+            var idx = rand.Next(0, 26);
+            sb.Append(letters[idx]);
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            var idx = rand.Next(0, 10);
+            sb.Append(nums[idx]);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            var idx = rand.Next(0, 10);
+            sb.Append(chars[idx]);
+        }
+        this.pwd = sb.ToString();
+        this.creator = this.updator = CurrentHttpContext.currentAdminAccount;
+        db.Insertable(this).IgnoreColumns(x => x.roles).ExecuteCommand();
+        EmailTool.SendEmailForNewAdmin(this.email, this.account, this.name, this.pwd);
+    }
+
+    /// <summary>
+    /// 编辑
+    /// </summary>
+    public void Update()
+    {
+        var admin = db.Queryable<Admin>().First(x => x.id == this.id);
+        if (admin == null)
+            throw BadRequestExp("账号不存在");
+        this.updator = CurrentHttpContext.currentAdminAccount;
+        db.Updateable(this).UpdateColumns(x => new { x.name, x.email, x.memo, x.updator }).ExecuteCommand();
+    }
+
+    /// <summary>
+    /// 删除
+    /// </summary>
+    public void Delete()
+    {
+        var admin = db.Queryable<Admin>().First(x => x.id == this.id);
+        if (admin == null)
+            throw BadRequestExp("账号不存在");
+        this.updator = CurrentHttpContext.currentAdminAccount;
+        db.Deleteable(this).IsLogic().ExecuteCommand("oust", this.id);
     }
 }

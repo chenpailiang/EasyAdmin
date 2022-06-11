@@ -29,7 +29,7 @@ public class AdminController : BaseController
     /// </summary>
     /// <returns></returns>
     [AuthSet(AuthEnum.at100)]
-    [HttpGet, Route("")]
+    [HttpGet, Route(""), AllowAnonymous]
     public ActionResult<List<AdminDto>> Get()
     {
         return default;
@@ -52,11 +52,10 @@ public class AdminController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [AuthSet(AuthEnum.at100)]
-    [HttpPost, Route("")]
+    [HttpPost, Route(""), AuthSet(AuthEnum.at102)]
     public ActionResult AddAdmin(AddAdminReq req)
     {
-        var res = adminService.AddAdmin(req);
+        adminService.AddAdmin(req);
         return Ok();
     }
 }

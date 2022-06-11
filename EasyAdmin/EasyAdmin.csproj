@@ -8,6 +8,7 @@
     <DockerfileContext>.</DockerfileContext>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile></DocumentationFile>
+    <UserSecretsId>82db36b4-ac44-4d5a-ba5a-20633835a877</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

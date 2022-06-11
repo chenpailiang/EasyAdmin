@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 
 builder.Services.AddRouting(op => op.LowercaseUrls = true);
@@ -73,6 +72,8 @@ foreach (var item in typeof(EasyService.Service.AdminService).Assembly.GetTypes(
 {
     builder.Services.AddScoped(item);
 }
+//” œ‰≈‰÷√∞Û∂®
+builder.Configuration.GetSection("EmailConfig").Bind(EmailTool.emailConfig);
 
 var app = builder.Build();
 

@@ -15,14 +15,14 @@ public class AdminService
     }
     public AdminDto Get(int id)
     {
-        var admin = Admin.Get(id);
+        var admin = Admin.db.Queryable<Admin>().First(x => x.id == id);
         if (admin == null) throw BadRequestExp("用户不存在");
         return imapper.Map<AdminDto>(admin);
     }
 
-    public AdminDto AddAdmin(AddAdminReq addAdminReq)
+    public void AddAdmin(AddAdminReq addAdminReq)
     {
         var admin = imapper.Map<Admin>(addAdminReq);
-        return imapper.Map<AdminDto>(admin);
+        admin.Create();
     }
 }
