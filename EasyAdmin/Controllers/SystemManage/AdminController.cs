@@ -25,26 +25,23 @@ public class AdminController : BaseController
     #endregion
 
     /// <summary>
-    /// 获取所有用户
+    /// 获取当前管理员信息
     /// </summary>
     /// <returns></returns>
-    [AuthSet(AuthEnum.at100)]
-    [HttpGet, Route(""), AllowAnonymous]
-    public ActionResult<List<AdminDto>> Get()
+    [HttpGet, Route("own")]
+    public ActionResult<AdminDto> Get()
     {
-        return default;
-
+        return adminService.Get(CurrentHttpContext.currentAdminId);
     }
 
     /// <summary>
-    /// 获取指定用户
+    /// 获取所有管理员信息
     /// </summary>
-    /// <param name="id">用户id</param>
     /// <returns></returns>
-    [HttpGet, Route("{id}"), AuthSet]
-    public ActionResult<AdminDto> Get(int id)
+    [HttpGet, Route(""), AuthSet(AuthEnum.at100)]
+    public ActionResult<List<AdminDto>> GetAll()
     {
-        return adminService.Get(id);
+        return adminService.GetAll();
     }
 
     /// <summary>
@@ -52,10 +49,34 @@ public class AdminController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPost, Route(""), AuthSet(AuthEnum.at102)]
+    [HttpPost, Route(""), AuthSet(AuthEnum.at101)]
     public ActionResult AddAdmin(AddAdminReq req)
     {
         adminService.AddAdmin(req);
+        return Ok();
+    }
+
+    /// <summary>
+    /// 编辑管理员
+    /// </summary>
+    /// <param name="req"></param>
+    /// <returns></returns>
+    [HttpPut, Route(""), AuthSet(AuthEnum.at102)]
+    public ActionResult EditAdmin(EditAdminReq req)
+    {
+        adminService.EditAdmin(req);
+        return Ok();
+    }
+
+    /// <summary>
+    /// 删除管理员
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete, Route(""), AuthSet(AuthEnum.at103)]
+    public ActionResult DelAdmin(int id)
+    {
+        adminService.DelAdmin(id);
         return Ok();
     }
 }

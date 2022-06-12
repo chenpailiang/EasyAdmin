@@ -20,7 +20,7 @@ public class SystemManageProfile : Profile
 
         CreateMap<Admin, AdminDto>();
 
-
+        CreateMap<EditAdminReq, Admin>();
 
         #endregion
 

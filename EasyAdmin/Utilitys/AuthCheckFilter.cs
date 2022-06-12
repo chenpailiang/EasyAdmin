@@ -31,10 +31,10 @@ public class AuthCheckFilter : IAuthorizationFilter
             {
                 try
                 {
-                    var role = context.HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role);
-                    var authIds = role.Select(x => int.Parse(x.Value));
+                    var role = context.HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Role);
+                    var authIds = JsonConvert.DeserializeObject<List<int>>(role.Value);
                     var req_authId = int.Parse(context.HttpContext.Request.Headers["aid"]);
-                    if (req_authId != authSet.authId || !authIds.Any(x => x == Utility.SuperAdmin || x == req_authId))
+                    if (req_authId != authSet.authId || authIds == null || !authIds.Any(x => x == Utility.SuperAdmin || x == req_authId))
                     {
                         context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
                         context.Result = new EmptyResult();

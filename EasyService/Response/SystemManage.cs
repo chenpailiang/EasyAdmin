@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace EasyService.Response;
 
-public class AdminDto
+public class AdminDto : BaseDto
 {
     public int id { get; set; }
     public string account { get; set; }
     public string name { get; set; }
-    public string memo { get; set; }
-    public List<string> roles { get; set; }
+    public string email { get; set; }
+    public string? memo { get; set; }
 }
 
 

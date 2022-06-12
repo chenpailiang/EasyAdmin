@@ -15,6 +15,7 @@ namespace AdminAuthCenter
 
         [SugarColumn(IsJson = true)]
         public List<int> roles { get; set; }
+        public string updator { get; set; }
         public int oust { get; set; }
     }
 

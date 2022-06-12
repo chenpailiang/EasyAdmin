@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace EasyEntity;
 
 /// <summary>
@@ -35,7 +34,7 @@ public class DbContext
         {
             ConfigId = "admin",
             DbType = SqlSugar.DbType.MySql,
-            ConnectionString = "Server=localhost;Uid=root;Database=easyadmin;Pwd=123456;Max Pool Size=75; Min Pool Size=5;",
+            ConnectionString = DbConnectConfig.config.adminMaster,
             IsAutoCloseConnection = true,
             ConfigureExternalServices = configureExternalServices
         },
@@ -43,7 +42,7 @@ public class DbContext
         {
             ConfigId = "goods",
             DbType = SqlSugar.DbType.MySql,
-            ConnectionString = "Server=localhost;Uid=root;Database=easyadmin;Pwd=123456;Max Pool Size=75; Min Pool Size=5;",
+            ConnectionString = DbConnectConfig.config.goodsMaster,
             IsAutoCloseConnection = true,
             ConfigureExternalServices = configureExternalServices
         },

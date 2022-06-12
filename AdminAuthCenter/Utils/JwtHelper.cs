@@ -48,11 +48,11 @@ namespace AdminAuthCenter.Utils
         /// <summary>
         /// 生成token
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="admin"></param>
         /// <param name="configuration"></param>
         /// <param name="login"></param>
         /// <returns></returns>
-        public static BaseReult GenerateJwt(Admin user, IConfiguration configuration, bool login = true)
+        public static BaseReult GenerateJwt(Admin admin, IConfiguration configuration, bool login = true)
         {
             JwtSecurityTokenHandler jwtHandler = new();
             var filepath = Directory.GetCurrentDirectory();
@@ -60,11 +60,26 @@ namespace AdminAuthCenter.Utils
                 throw new Exception("jwt密钥配置读取失败");
             jwtconfig ??= configuration.GetSection("jwtConfig").Get<JwtConfig>();
             var claims = new List<Claim> {
-                new Claim(ClaimTypes.NameIdentifier,user.id.ToString()),
-                new Claim(ClaimTypes.Name,user.account)
+                new Claim(ClaimTypes.NameIdentifier,admin.id.ToString()),
+                new Claim(ClaimTypes.Name,admin.account)
             };
-            if (user.roles != null && user.roles.Count > 0)
-                claims.AddRange(user.roles.Select(x => new Claim(ClaimTypes.Role, x.ToString())));
+            if (admin.roles != null && admin.roles.Count > 0)
+            {
+                if (admin.roles.Any(x => x == 1)) // 超级管理员
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "[-1]"));
+                }
+                else
+                {
+                    var roles = DbContext.Db.Queryable<Role>().In(admin.roles).Where(x => x.oust == 0).ToList();
+                    var funcs = DbContext.Db.Queryable<MenuFunc>().In(roles.SelectMany(x => x.funcs).Distinct()).Where(x => x.oust == 0).ToList();
+                    var authIds = funcs.Select(x => x.authId).Distinct();
+                    if (authIds.Any())
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, JsonConvert.SerializeObject(authIds)));
+                    }
+                }
+            }
             SecurityTokenDescriptor tokenDescriptor = new()
             {
                 Issuer = jwtconfig.issuer,
@@ -76,7 +91,7 @@ namespace AdminAuthCenter.Utils
             var token = jwtHandler.CreateToken(tokenDescriptor);
             var result = JwtResult.Ok(jwtHandler.WriteToken(token), login);
             if (login)
-                refreshTokens.AddOrUpdate(user.id, new RefreshToken() { expire = DateTime.UtcNow.AddMinutes(jwtconfig.refreshExpire), token = result.refresh }, (id, token) => token);
+                refreshTokens.AddOrUpdate(admin.id, new RefreshToken() { expire = DateTime.UtcNow.AddMinutes(jwtconfig.refreshExpire), token = result.refresh }, (id, token) => token);
             return result;
         }
 

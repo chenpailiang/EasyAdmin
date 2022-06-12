@@ -17,14 +17,14 @@ public class MenuService
     /// <summary>
     /// 获取用户具有权限的菜单
     /// </summary>
-    /// <param name="adminId"></param>
     /// <returns></returns>
     public MenuRsp GetRoleMenus()
     {
+        MenuRsp rsp = new();
         var roleIds = Admin.db.Queryable<Admin>().First(x => x.id == CurrentHttpContext.currentAdminId).roles;
+        if (roleIds == null) return rsp;
         if (roleIds.Contains(Utility.SuperAdmin))
             return GetMenus();
-        MenuRsp rsp = new();
         var roles = Role.db.Queryable<Role>().Where(x => roleIds.Contains(x.id)).ToList();
         var menuIds = roles.SelectMany(x => x.menus).Distinct().ToList();
         var menus = Menu.db.Queryable<Menu>().Where(x => menuIds.Contains(x.id)).OrderBy(x => x.sort).ToList();

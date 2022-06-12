@@ -1,12 +1,11 @@
 using AdminAuthCenter.Utils;
 using System.Configuration;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddMysqlSetup(builder.Configuration);
+
 builder.Services.AddJwtSecretSetUp();
 builder.Services.AddCors(opt =>
 {
@@ -21,6 +20,8 @@ builder.Services.AddControllers(x =>
 {
     x.Filters.Add<ExceptionFilter>();
 });
+
+DbContext.Init(builder.Configuration.GetValue<string>("dbConnectString"));
 
 var app = builder.Build();
 

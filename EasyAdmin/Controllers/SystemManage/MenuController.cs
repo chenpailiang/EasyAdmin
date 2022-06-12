@@ -25,7 +25,7 @@ public class MenuController : BaseController
     /// 获取用户具有权限的菜单
     /// </summary>
     /// <returns></returns>
-    [HttpGet, Route("admin")]
+    [HttpGet, Route("own")]
     public ActionResult<MenuRsp> GetRoleMenus()
     {
         return menuService.GetRoleMenus();
@@ -35,7 +35,7 @@ public class MenuController : BaseController
     /// 查询菜单列表
     /// </summary>
     /// <returns></returns>
-    [HttpGet, Route("{name?}"), AuthSet(AuthEnum.at140)]
+    [HttpGet, Route("{name?}"), AuthSet(AuthEnum.at120)]
     public ActionResult<MenuRsp> GetMenus(string? name)
     {
         return Ok(menuService.GetMenus(name));
@@ -46,7 +46,7 @@ public class MenuController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPost, Route(""), AuthSet(AuthEnum.at141)]
+    [HttpPost, Route(""), AuthSet(AuthEnum.at121)]
     public ActionResult AddMenu([FromBody] AddMenuReq req)
     {
         menuService.AddMenu(req);
@@ -58,7 +58,7 @@ public class MenuController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPut, Route(""), AuthSet(AuthEnum.at142)]
+    [HttpPut, Route(""), AuthSet(AuthEnum.at122)]
     public ActionResult EditMenu([FromBody] EditMenuReq req)
     {
         menuService.EditMenu(req);
@@ -70,7 +70,7 @@ public class MenuController : BaseController
     /// </summary>
     /// <param name="id">菜单Id</param>
     /// <returns></returns>
-    [HttpDelete, Route("{id}"), AuthSet(AuthEnum.at143)]
+    [HttpDelete, Route("{id}"), AuthSet(AuthEnum.at123)]
     public ActionResult DelMenu(int id)
     {
         menuService.DelMenu(id);
@@ -82,7 +82,7 @@ public class MenuController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPost,Route("func"),AuthSet(AuthEnum.at144)]
+    [HttpPost,Route("func"),AuthSet(AuthEnum.at131)]
     public ActionResult AddFunc([FromBody] AddFuncReq req)
     {
         menuService.AddFunc(req);
@@ -94,7 +94,7 @@ public class MenuController : BaseController
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPut, Route("func"), AuthSet(AuthEnum.at145)]
+    [HttpPut, Route("func"), AuthSet(AuthEnum.at132)]
     public ActionResult EditFunc([FromBody] EditFuncReq req)
     {
         menuService.EditFunc(req);
@@ -106,7 +106,7 @@ public class MenuController : BaseController
     /// </summary>
     /// <param name="id">功能Id</param>
     /// <returns></returns>
-    [HttpDelete, Route("func/{id}"), AuthSet(AuthEnum.at146)]
+    [HttpDelete, Route("func/{id}"), AuthSet(AuthEnum.at133)]
     public ActionResult DelFunc(int id)
     {
         menuService.DelFunc(id);

@@ -20,13 +20,11 @@ namespace AdminAuthCenter.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IConfiguration configuration;
-        private readonly ISqlSugarClient db;
 
-        public AuthController(ILogger<AuthController> logger, IConfiguration configuration, ISqlSugarClient db)
+        public AuthController(ILogger<AuthController> logger, IConfiguration configuration)
         {
             _logger = logger;
             this.configuration = configuration;
-            this.db = db;
         }
 
         public record LoginModel(string account, string pwd);
@@ -39,7 +37,7 @@ namespace AdminAuthCenter.Controllers
         [HttpPost]
         public ActionResult Login([FromBody] LoginModel user)
         {
-            var admin = db.Queryable<Admin>().First(x => x.account == user.account && x.pwd == user.pwd && x.oust == 0);
+            var admin = DbContext.Db.Queryable<Admin>().First(x => x.account == user.account && x.pwd == user.pwd && x.oust == 0);
             if (admin == null)
                 return Ok(new BaseReult { error = "账号或密码错误，登录失败请重试" });
             var token = JwtHelper.GenerateJwt(admin, configuration);
@@ -65,7 +63,7 @@ namespace AdminAuthCenter.Controllers
         {
             var claims = JwtHelper.GetClaims(request.token, configuration);
             var id = int.Parse(claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var admin = db.Queryable<Admin>().First(x => x.id == id);
+            var admin = DbContext.Db.Queryable<Admin>().First(x => x.id == id);
             if (admin == null)
                 return Ok(new BaseReult { error = "账号不存在" });
             JwtHelper.ClearJwt(id);
@@ -79,7 +77,7 @@ namespace AdminAuthCenter.Controllers
                 return Ok(new BaseReult { error = "新密码两次输入不一致" });
             var claims = JwtHelper.GetClaims(request.token, configuration);
             var id = int.Parse(claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
-            var admin = db.Queryable<Admin>().First(x => x.id == id);
+            var admin = DbContext.Db.Queryable<Admin>().First(x => x.id == id);
             if (admin == null)
                 return Ok(new BaseReult { error = "账号不存在" });
             if (admin.pwd != request.oldPwd)
@@ -88,7 +86,8 @@ namespace AdminAuthCenter.Controllers
                 return Ok(new BaseReult { error = "新密码不能与原密码一样" });
             JwtHelper.ClearJwt(id);
             admin.pwd = request.newPwd1;
-            db.Updateable<Admin>(admin).ExecuteCommand();
+            admin.updator = admin.account;
+            DbContext.Db.Updateable<Admin>(admin).UpdateColumns(x => new { x.pwd, x.updator }).ExecuteCommand();
             return Ok();
         }
     }

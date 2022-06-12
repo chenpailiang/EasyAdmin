@@ -73,9 +73,11 @@ foreach (var item in typeof(EasyService.Service.AdminService).Assembly.GetTypes(
     builder.Services.AddScoped(item);
 }
 //邮箱配置绑定
-builder.Configuration.GetSection("EmailConfig").Bind(EmailTool.emailConfig);
+builder.Configuration.GetSection("EmailConfig").Bind(EmailTool.emailConfig); 
+//数据库连接串绑定
+builder.Configuration.GetSection("DbConnectConfig").Bind(DbConnectConfig.config); 
 
-var app = builder.Build();
+ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

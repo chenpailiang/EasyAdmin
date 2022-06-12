@@ -9,7 +9,7 @@ namespace EasyCommon;
 
 public static class Utility
 {
-    public const int SuperAdmin = 1;
+    public const int SuperAdmin = -1;
 
     public static bool Nil(this string? str) => string.IsNullOrWhiteSpace(str);
     public static bool Nil(this IEnumerable list) => list == null || !list.GetEnumerator().MoveNext();

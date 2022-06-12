@@ -11,22 +11,59 @@ namespace EasyCommon;
 /// </summary>
 public enum AuthEnum : uint
 {
-    // 用户管理
+    /// <summary>
+    /// 用户管理-查询
+    /// </summary>
     at100 = 100,
+    /// <summary>
+    /// 用户管理-新增
+    /// </summary>
     at101 = 101,
+    /// <summary>
+    /// 用户管理-编辑
+    /// </summary>
     at102 = 102,
+    /// <summary>
+    /// 用户管理-删除
+    /// </summary>
+    at103 = 103,
 
-    // 角色管理
+    /// <summary>
+    /// 角色管理
+    /// </summary>
+    at110 = 110,
+    at111 = 111,
+    at112 = 112,
+
+    
+    /// <summary>
+    /// 菜单管理-查询
+    /// </summary>
     at120 = 120,
+    /// <summary>
+    /// 菜单管理-新增
+    /// </summary>
     at121 = 121,
+    /// <summary>
+    /// 菜单管理-编辑
+    /// </summary>
     at122 = 122,
+    /// <summary>
+    /// 菜单管理-删除
+    /// </summary>
+    at123 = 123,
+    /// <summary>
+    /// 菜单管理-新增功能
+    /// </summary>
+    at131 = 131,
+    /// <summary>
+    /// 菜单管理-编辑功能
+    /// </summary>
+    at132 = 132,
+    /// <summary>
+    /// 菜单管理-删除功能
+    /// </summary>
+    at133 = 133,
 
-    // 菜单管理
-    at140 = 140,
-    at141 = 141,
-    at142 = 142,
-    at143 = 143,
-    at144 = 144,
-    at145 = 145,
-    at146 = 146,
+
 }

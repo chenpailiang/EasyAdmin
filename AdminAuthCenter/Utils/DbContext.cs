@@ -5,16 +5,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 namespace AdminAuthCenter.Utils;
 
-public static class DBSetup
+public class DbContext
 {
-    public static void AddMysqlSetup(this IServiceCollection services, IConfiguration configuration, string dbName = "db_master")
+    public static SqlSugarScope Db { get; private set; }
+    public static void Init(string dbConnectString)
     {
-        SqlSugarScope sqlSugar = new(new ConnectionConfig()
+        Db = new SqlSugarScope(new ConnectionConfig
         {
             DbType = SqlSugar.DbType.MySql,
-            ConnectionString = configuration[dbName],
+            ConnectionString = dbConnectString,
             IsAutoCloseConnection = true,
             ConfigureExternalServices = new ConfigureExternalServices()
             {
@@ -31,16 +33,14 @@ public static class DBSetup
                 }
             }
         },
-          db =>
-          {
-              //单例参数配置，所有上下文生效
-              db.Aop.OnLogExecuting = (sql, pars) =>
-                  {
-                      Console.WriteLine(sql);//输出sql
-                          Console.WriteLine(string.Join(",", pars?.Select(it => it.ParameterName + ":" + it.Value)));//参数
-                      };
-          });
-        services.AddSingleton<ISqlSugarClient>(sqlSugar);
-
+         db =>
+         {
+             //单例参数配置，所有上下文生效
+             db.Aop.OnLogExecuting = (sql, pars) =>
+             {
+                 Console.WriteLine(sql);//输出sql
+                 Console.WriteLine(string.Join(",", pars?.Select(it => it.ParameterName + ":" + it.Value)));//参数
+             };
+         });
     }
 }
