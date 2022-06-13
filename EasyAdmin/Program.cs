@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigTool.config = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddRouting(op => op.LowercaseUrls = true);
@@ -25,7 +26,7 @@ builder.Services.AddCors(opt =>
         builder.AllowAnyOrigin();
     });
 });
-builder.Services.AddJwtAuthSetup(builder.Configuration);
+builder.Services.AddJwtAuthSetup();
 
 var currentAssembly = Assembly.GetExecutingAssembly();
 
@@ -75,11 +76,6 @@ foreach (var item in typeof(EasyService.Service.AdminService).Assembly.GetTypes(
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CurrentUser>();
-
-//邮箱配置绑定
-builder.Configuration.GetSection("EmailConfig").Bind(EmailTool.emailConfig); 
-//数据库连接串绑定
-builder.Configuration.GetSection("DbConnectConfig").Bind(DbConnectConfig.config); 
 
  var app = builder.Build();
 

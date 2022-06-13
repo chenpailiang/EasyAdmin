@@ -12,7 +12,7 @@ namespace EasyCommon;
 
 public static class EmailTool
 {
-    public static readonly EmailConfig emailConfig = new();
+    private static readonly EmailConfig emailConfig = ConfigTool.Get<EmailConfig>("EmailConfig");
 
     public static void SendEmailForNewAdmin(string toEmail, string account, string name, string pwd)
     {
@@ -29,16 +29,16 @@ public static class EmailTool
             smtp.Authenticate(emailConfig.account, emailConfig.pwd); // 验证账号
             smtp.Send(message);  //发送邮件
             smtp.Disconnect(true); //断开连接
-
         }
     }
+    private class EmailConfig
+    {
+        public string host { get; init; }
+        public int port { get; init; }
+        public string sender { get; init; }
+        public string address { get; init; }
+        public string account { get; init; }
+        public string pwd { get; init; }
+    }
 }
-public class EmailConfig
-{
-    public string host { get; init; }
-    public int port { get; init; }
-    public string sender { get; init; }
-    public string address { get; init; }
-    public string account { get; init; }
-    public string pwd { get; init; }
-}
+

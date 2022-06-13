@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using EasyCommon;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Security.Cryptography;
@@ -12,9 +13,9 @@ public static class JwtAuthConfig
     /// </summary>
     /// <param name="services"></param>
     /// <param name="configuration"></param>
-    public static void AddJwtAuthSetup(this IServiceCollection services, IConfiguration configuration)
+    public static void AddJwtAuthSetup(this IServiceCollection services)
     {
-        var jwtconfig = configuration.GetSection("jwtConfig").Get<JwtConfig>();
+        var jwtconfig = ConfigTool.Get<JwtConfig>("JwtConfig");
         var pubicKey = new RsaSecurityKey(JsonConvert.DeserializeObject<RSAParameters>(File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "publicKey.json"))));
         services.AddAuthentication().AddJwtBearer(jwt =>
             {

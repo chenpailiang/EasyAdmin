@@ -1,4 +1,5 @@
 ﻿global using EasyCommon;
+using Microsoft.Extensions.Configuration;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -27,14 +28,19 @@ public class DbContext
             }
         }
     };
-
+    private class DbConnectConfig
+    {
+        public string adminMaster { get; set; }
+        public string goodsMaster { get; set; }
+    }
+    private static DbConnectConfig dbConnectConfig = ConfigTool.Get<DbConnectConfig>("DbConnectConfig");
     private static readonly List<ConnectionConfig> connectionConfigs = new()
     {
         new ConnectionConfig
         {
             ConfigId = "admin",
             DbType = SqlSugar.DbType.MySql,
-            ConnectionString = DbConnectConfig.config.adminMaster,
+            ConnectionString = dbConnectConfig.adminMaster,
             IsAutoCloseConnection = true,
             ConfigureExternalServices = configureExternalServices
         },
@@ -42,7 +48,7 @@ public class DbContext
         {
             ConfigId = "goods",
             DbType = SqlSugar.DbType.MySql,
-            ConnectionString = DbConnectConfig.config.goodsMaster,
+            ConnectionString = dbConnectConfig.goodsMaster,
             IsAutoCloseConnection = true,
             ConfigureExternalServices = configureExternalServices
         },
@@ -64,6 +70,7 @@ public class DbContext
                  Console.WriteLine(string.Join(",", pars?.Select(it => it.ParameterName + ":" + it.Value)));//参数
              };
          });
+
 }
 
 public abstract class BaseEntity
