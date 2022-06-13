@@ -21,6 +21,11 @@ public class AuthSetAttribute : Attribute
 /// </summary>
 public class AuthCheckFilter : IAuthorizationFilter
 {
+    private readonly CurrentUser currentUser;
+    public AuthCheckFilter(CurrentUser currentUser)
+    {
+        this.currentUser = currentUser;
+    }
     public void OnAuthorization(AuthorizationFilterContext context)
     {
         var needAuth = context.ActionDescriptor.EndpointMetadata.FirstOrDefault(x => x is AllowAnonymousAttribute) == null;
@@ -31,8 +36,7 @@ public class AuthCheckFilter : IAuthorizationFilter
             {
                 try
                 {
-                    var role = context.HttpContext.User.Claims.First(x => x.Type == ClaimTypes.Role);
-                    var authIds = JsonConvert.DeserializeObject<List<int>>(role.Value);
+                    var authIds = currentUser.auths;
                     var req_authId = int.Parse(context.HttpContext.Request.Headers["aid"]);
                     if (req_authId != authSet.authId || authIds == null || !authIds.Any(x => x == Utility.SuperAdmin || x == req_authId))
                     {

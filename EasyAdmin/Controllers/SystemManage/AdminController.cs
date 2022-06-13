@@ -16,11 +16,13 @@ public class AdminController : BaseController
     #region ππ‘Ï
     private readonly ILogger<AdminController> _logger;
     private readonly AdminService adminService;
+    private readonly CurrentUser currentUser;
 
-    public AdminController(ILogger<AdminController> logger, AdminService adminService)
+    public AdminController(ILogger<AdminController> logger, AdminService adminService, CurrentUser currentUser)
     {
         _logger = logger;
         this.adminService = adminService;
+        this.currentUser = currentUser;
     }
     #endregion
 
@@ -31,7 +33,7 @@ public class AdminController : BaseController
     [HttpGet, Route("own")]
     public ActionResult<AdminDto> Get()
     {
-        return adminService.Get(CurrentHttpContext.currentAdminId);
+        return adminService.Get(currentUser.id);
     }
 
     /// <summary>

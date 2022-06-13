@@ -34,10 +34,6 @@ public class MenuDto
     /// 图标
     /// </summary>
     public string? icon { get; set; }
-    /// <summary>
-    /// 页面地址
-    /// </summary>
-    public string? path { get; set; }
     public int sort { get; set; }
 }
 public class FuncDto

@@ -72,6 +72,10 @@ foreach (var item in typeof(EasyService.Service.AdminService).Assembly.GetTypes(
 {
     builder.Services.AddScoped(item);
 }
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<CurrentUser>();
+
 //邮箱配置绑定
 builder.Configuration.GetSection("EmailConfig").Bind(EmailTool.emailConfig); 
 //数据库连接串绑定
@@ -94,7 +98,5 @@ app.UseAuthorization();
 app.UseAuthentication();
 
 app.MapControllers();
-
-app.UseMiddleware<HttpContextMiddleware>();
 
 app.Run();

@@ -20,7 +20,7 @@ public class Admin : AdminEntity
     /// <summary>
     /// 新增
     /// </summary>
-    public void Create()
+    public void Create(CurrentUser currentUser)
     {
         if (db.Queryable<Admin>().Any(x => x.account == this.account))
             throw BadRequestExp("账号已存在");
@@ -45,7 +45,7 @@ public class Admin : AdminEntity
             sb.Append(chars[idx]);
         }
         this.pwd = sb.ToString();
-        this.creator = this.updator = CurrentHttpContext.currentAdminAccount;
+        this.creator = this.updator = currentUser.account;
         db.Insertable(this).IgnoreColumns(x => x.roles).ExecuteCommand();
         EmailTool.SendEmailForNewAdmin(this.email, this.account, this.name, this.pwd);
     }
@@ -53,24 +53,24 @@ public class Admin : AdminEntity
     /// <summary>
     /// 编辑
     /// </summary>
-    public void Update()
+    public void Update(CurrentUser currentUser)
     {
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
             throw BadRequestExp("账号不存在");
-        this.updator = CurrentHttpContext.currentAdminAccount;
+        this.updator = currentUser.account;
         db.Updateable(this).UpdateColumns(x => new { x.name, x.email, x.memo, x.updator }).ExecuteCommand();
     }
 
     /// <summary>
     /// 删除
     /// </summary>
-    public void Delete()
+    public void Delete(CurrentUser currentUser)
     {
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
             throw BadRequestExp("账号不存在");
-        this.updator = CurrentHttpContext.currentAdminAccount;
+        this.updator = currentUser.account;
         db.Deleteable(this).IsLogic().ExecuteCommand("oust", this.id);
     }
 }

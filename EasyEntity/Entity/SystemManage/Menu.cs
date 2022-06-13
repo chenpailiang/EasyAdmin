@@ -15,42 +15,41 @@ public class Menu : AdminEntity
     public string name { get; private set; }
     public string symbol { get; private set; }
     public string? icon { get; private set; }
-    public string? path { get; private set; }
     public int sort { get; private set; }
 
     /// <summary>
     /// 新增
     /// </summary>
-    public void Create()
+    public void Create(CurrentUser currentUser)
     {
         if (db.Queryable<Menu>().Any(x => x.parentId == this.parentId && x.name == this.name))
             throw BadRequestExp("菜单已存在");
-        this.creator = this.updator = CurrentHttpContext.currentAdminAccount;
+        this.creator = this.updator = currentUser.account;
         db.Insertable(this).ExecuteCommand();
     }
 
     /// <summary>
     /// 编辑
     /// </summary>
-    public void Update()
+    public void Update(CurrentUser currentUser)
     {
         var menus = db.Queryable<Menu>().Where(x => x.id == this.id || x.parentId == this.parentId && x.name == this.name).ToList();
         if (!menus.Any(x => x.id == this.id))
             throw BadRequestExp("菜单不存在");
         if (menus.Count > 1)
             throw BadRequestExp("菜单名称已存在");
-        this.updator = CurrentHttpContext.currentAdminAccount;
+        this.updator = currentUser.account;
         db.Updateable(this).ExecuteCommand();
     }
 
     /// <summary>
     /// 删除
     /// </summary>
-    public void Delete()
+    public void Delete(CurrentUser currentUser)
     {
         if (!db.Queryable<Menu>().Any(x => x.id == this.id))
             throw BadRequestExp("菜单不存在");
-        this.updator = CurrentHttpContext.currentAdminAccount;
+        this.updator = currentUser.account;
         db.Deleteable(this).IsLogic().ExecuteCommand("oust", this.id);
     }
 }

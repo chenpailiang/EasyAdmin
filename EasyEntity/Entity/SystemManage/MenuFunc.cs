@@ -19,36 +19,36 @@ public class MenuFunc : AdminEntity
     /// <summary>
     /// 新增
     /// </summary>
-    public void Create()
+    public void Create(CurrentUser currentUser)
     {
         if (db.Queryable<MenuFunc>().Any(x => x.menuId == this.menuId && x.symbol == this.symbol))
             throw BadRequestExp("功能已存在");
-        this.creator = this.updator = CurrentHttpContext.currentAdminAccount;
+        this.creator = this.updator = currentUser.account;
         db.Insertable(this).ExecuteCommand();
     }
 
     /// <summary>
     /// 编辑
     /// </summary>
-    public void Update()
+    public void Update(CurrentUser currentUser)
     {
         var menus = db.Queryable<MenuFunc>().Where(x => x.id == this.id || x.menuId == this.menuId && x.symbol == this.symbol).ToList();
         if (!menus.Any(x => x.id == this.id))
             throw BadRequestExp("功能不存在");
         if (menus.Count > 1)
             throw BadRequestExp("功能已存在");
-        this.updator = CurrentHttpContext.currentAdminAccount;
+        this.updator = currentUser.account;
         db.Updateable(this).ExecuteCommand();
     }
 
     /// <summary>
     /// 删除
     /// </summary>
-    public void Delete()
+    public void Delete(CurrentUser currentUser)
     {
         if (!db.Queryable<MenuFunc>().Any(x => x.id == this.id))
             throw BadRequestExp("功能不存在");
-        this.updator = CurrentHttpContext.currentAdminAccount;
+        this.updator = currentUser.account;
         db.Deleteable(this).IsLogic().ExecuteCommand("oust", this.id);
     }
 }

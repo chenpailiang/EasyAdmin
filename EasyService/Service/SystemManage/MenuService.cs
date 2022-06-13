@@ -9,9 +9,11 @@ namespace EasyService.Service;
 public class MenuService
 {
     private readonly IMapper mapper;
-    public MenuService(IMapper mapper)
+    private readonly CurrentUser currentUser;
+    public MenuService(IMapper mapper, CurrentUser currentUser)
     {
         this.mapper = mapper;
+        this.currentUser = currentUser;
     }
 
     /// <summary>
@@ -21,10 +23,10 @@ public class MenuService
     public MenuRsp GetRoleMenus()
     {
         MenuRsp rsp = new();
-        var roleIds = Admin.db.Queryable<Admin>().First(x => x.id == CurrentHttpContext.currentAdminId).roles;
-        if (roleIds == null) return rsp;
-        if (roleIds.Contains(Utility.SuperAdmin))
+        if (currentUser.isSuper)
             return GetMenus();
+        var roleIds = Admin.db.Queryable<Admin>().First(x => x.id == currentUser.id).roles;
+        if (roleIds == null) return rsp;
         var roles = Role.db.Queryable<Role>().Where(x => roleIds.Contains(x.id)).ToList();
         var menuIds = roles.SelectMany(x => x.menus).Distinct().ToList();
         var menus = Menu.db.Queryable<Menu>().Where(x => menuIds.Contains(x.id)).OrderBy(x => x.sort).ToList();
@@ -56,7 +58,7 @@ public class MenuService
     public void AddMenu(AddMenuReq req)
     {
         var menu = mapper.Map<Menu>(req);
-        menu.Create();
+        menu.Create(currentUser);
     }
 
     /// <summary>
@@ -66,7 +68,7 @@ public class MenuService
     public void EditMenu(EditMenuReq req)
     {
         var menu = mapper.Map<Menu>(req);
-        menu.Update();
+        menu.Update(currentUser);
     }
 
     /// <summary>
@@ -76,7 +78,7 @@ public class MenuService
     public void DelMenu(int id)
     {
         var menu = new Menu { id = id };
-        menu.Delete();
+        menu.Delete(currentUser);
     }
 
     /// <summary>
@@ -86,7 +88,7 @@ public class MenuService
     public void AddFunc(AddFuncReq req)
     {
         var func = mapper.Map<MenuFunc>(req);
-        func.Create();
+        func.Create(currentUser);
     }
 
     /// <summary>
@@ -96,7 +98,7 @@ public class MenuService
     public void EditFunc(EditFuncReq req)
     {
         var func = mapper.Map<MenuFunc>(req);
-        func.Update();
+        func.Update(currentUser);
     }
 
     /// <summary>
@@ -106,6 +108,6 @@ public class MenuService
     public void DelFunc(int id)
     {
         var func = new MenuFunc { id = id };
-        func.Delete();
+        func.Delete(currentUser);
     }
 }

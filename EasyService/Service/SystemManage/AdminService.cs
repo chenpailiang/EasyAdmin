@@ -3,15 +3,18 @@ using AutoMapper;
 using EasyEntity.Entity;
 using EasyService.Response;
 using EasyService.Request;
+using EasyCommon;
 
 namespace EasyService.Service;
 
 public class AdminService
 {
     private readonly IMapper imapper;
-    public AdminService(IMapper imapper)
+    private readonly CurrentUser currentUser;
+    public AdminService(IMapper imapper, CurrentUser currentUser)
     {
         this.imapper = imapper;
+        this.currentUser = currentUser;
     }
 
     /// <summary>
@@ -43,7 +46,7 @@ public class AdminService
     public void AddAdmin(AddAdminReq req)
     {
         var admin = imapper.Map<Admin>(req);
-        admin.Create();
+        admin.Create(currentUser);
     }
 
     /// <summary>
@@ -53,7 +56,7 @@ public class AdminService
     public void EditAdmin(EditAdminReq req)
     {
         var admin = imapper.Map<Admin>(req);
-        admin.Update();
+        admin.Update(currentUser);
     }
 
     /// <summary>
@@ -63,6 +66,6 @@ public class AdminService
     public void DelAdmin(int id)
     {
         var admin = new Admin { id = id };
-        admin.Delete();
+        admin.Delete(currentUser);
     }
 }

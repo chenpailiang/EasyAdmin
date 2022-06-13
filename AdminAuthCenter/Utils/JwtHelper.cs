@@ -35,15 +35,8 @@ namespace AdminAuthCenter.Utils
                 return BaseReult.Fail();
             if (cacheRefresh.expire < DateTime.UtcNow)
                 return BaseReult.Fail();
-            var user = new Admin
-            {
-                id = id,
-                account = claims.First(x => x.Type == ClaimTypes.Name).Value,
-            };
-            var roles = claims.Where(x => x.Type == ClaimTypes.Role);
-            if (roles.Any())
-                user.roles = roles.Select(x => int.Parse(x.Value)).ToList(); //TODO 具体权限
-            return GenerateJwt(user, configuration, false); //生成新token
+            var admin = DbContext.Db.Queryable<Admin>().First(x => x.id == id && x.oust == 0);
+            return GenerateJwt(admin, configuration, false); //生成新token
         }
         /// <summary>
         /// 生成token

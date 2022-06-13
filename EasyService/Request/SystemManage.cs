@@ -8,7 +8,6 @@ public class AddMenuReq
     public string name { get; set; }
     public string symbol { get; set; }
     public string? icon { get; set; }
-    public string? path { get; set; }
     public int sort { get; set; }
 }
 
