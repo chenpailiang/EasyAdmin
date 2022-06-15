@@ -12,7 +12,6 @@ public static class JwtAuthConfig
     /// jwt配置
     /// </summary>
     /// <param name="services"></param>
-    /// <param name="configuration"></param>
     public static void AddJwtAuthSetup(this IServiceCollection services)
     {
         var jwtconfig = ConfigTool.Get<JwtConfig>("JwtConfig");

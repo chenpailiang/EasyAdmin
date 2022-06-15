@@ -29,13 +29,23 @@ public enum AuthEnum : uint
     at103 = 103,
 
     /// <summary>
-    /// 角色管理
+    /// 角色管理-查询
     /// </summary>
     at110 = 110,
+    /// <summary>
+    /// 角色管理-新增
+    /// </summary>
     at111 = 111,
+    /// <summary>
+    /// 角色管理-编辑
+    /// </summary>
     at112 = 112,
+    /// <summary>
+    /// 角色管理-删除
+    /// </summary>
+    at113 = 113,
 
-    
+
     /// <summary>
     /// 菜单管理-查询
     /// </summary>

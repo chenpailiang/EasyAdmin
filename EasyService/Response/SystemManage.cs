@@ -6,15 +6,29 @@ using System.Threading.Tasks;
 
 namespace EasyService.Response;
 
+#region 用户管理
+
 public class AdminDto : BaseDto
 {
     public int id { get; set; }
+    /// <summary>
+    /// 账号
+    /// </summary>
     public string account { get; set; }
+    /// <summary>
+    /// 名称
+    /// </summary>
     public string name { get; set; }
+    /// <summary>
+    /// 邮箱
+    /// </summary>
     public string email { get; set; }
+    /// <summary>
+    /// 备注
+    /// </summary>
     public string? memo { get; set; }
 }
-
+#endregion
 
 #region 菜单管理
 
@@ -34,14 +48,29 @@ public class MenuDto
     /// 图标
     /// </summary>
     public string? icon { get; set; }
+    /// <summary>
+    /// 排序
+    /// </summary>
     public int sort { get; set; }
 }
 public class FuncDto
 {
     public int id { get; init; }
+    /// <summary>
+    /// 菜单Id
+    /// </summary>
     public int menuId { get; private set; }
+    /// <summary>
+    /// 功能名称
+    /// </summary>
     public string name { get; private set; }
+    /// <summary>
+    /// 编码
+    /// </summary>
     public string symbol { get; private set; }
+    /// <summary>
+    /// 说明
+    /// </summary>
     public string description { get; private set; }
 }
 
@@ -60,13 +89,20 @@ public class MenuRsp
     public List<FuncDto> funcs { get; set; }
 }
 
-public class RoleDto
+#endregion
+
+#region 角色管理
+
+public class RoleDto : BaseDto
 {
     public int id { get; set; }
+    /// <summary>
+    /// 角色名称
+    /// </summary>
     public string name { get; set; }
+    /// <summary>
+    /// 备注
+    /// </summary>
     public string memo { get; set; }
-    public List<int> menus { get; set; }
-    public List<int> funcs { get; set; }
 }
-
 #endregion

@@ -36,7 +36,7 @@ public class MenuFunc : AdminEntity
         if (!menus.Any(x => x.id == this.id))
             throw BadRequestExp("功能不存在");
         if (menus.Count > 1)
-            throw BadRequestExp("功能已存在");
+            throw BadRequestExp("功能名称已存在");
         this.updator = currentUser.account;
         db.Updateable(this).ExecuteCommand();
     }
