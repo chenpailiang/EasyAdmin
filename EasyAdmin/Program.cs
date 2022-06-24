@@ -39,13 +39,20 @@ builder.Services.Configure<ApiBehaviorOptions>(op =>
 {
     op.InvalidModelStateResponseFactory = (context) =>
     {
-        var errors = context.ModelState.Values.SelectMany(x => x.Errors.SelectMany(y => y.ErrorMessage));
-        var result = new
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Development)
         {
-            Message = "参数错误",
-            Errors = errors
-        };
-        return new BadRequestObjectResult(result);
+            var errors = context.ModelState.Values.SelectMany(x => x.Errors);
+            var result = new
+            {
+                message = "参数错误",
+                errors = errors.Select(x => x.ErrorMessage)
+            };
+            return new BadRequestObjectResult(result);
+        }
+        else
+        {
+            return new BadRequestObjectResult(new { message = "参数错误" });
+        }
     };
 });
 var currentAssemblyName = currentAssembly.GetName().Name;
@@ -77,7 +84,7 @@ foreach (var item in typeof(EasyService.Service.RoleService).Assembly.GetTypes()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CurrentUser>();
 
- var app = builder.Build();
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

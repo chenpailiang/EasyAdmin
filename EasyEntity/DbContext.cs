@@ -14,6 +14,15 @@ namespace EasyEntity;
 /// </summary>
 public class DbContext
 {
+
+    private class DbConnectConfig
+    {
+        public string adminMaster { get; set; }
+        public string goodsMaster { get; set; }
+    }
+
+    private static DbConnectConfig dbConnectConfig = ConfigTool.Get<DbConnectConfig>("DbConnectConfig");
+
     private static readonly ConfigureExternalServices configureExternalServices = new ConfigureExternalServices()
     {
         EntityService = (t, column) =>
@@ -28,13 +37,8 @@ public class DbContext
             }
         }
     };
-    private class DbConnectConfig
-    {
-        public string adminMaster { get; set; }
-        public string goodsMaster { get; set; }
-    }
-    private static DbConnectConfig dbConnectConfig = ConfigTool.Get<DbConnectConfig>("DbConnectConfig");
-    private static readonly List<ConnectionConfig> connectionConfigs = new()
+
+    public static SqlSugarScope Db = new SqlSugarScope(new List<ConnectionConfig>()
     {
         new ConnectionConfig
         {
@@ -52,9 +56,7 @@ public class DbContext
             IsAutoCloseConnection = true,
             ConfigureExternalServices = configureExternalServices
         },
-    };
-
-    public static SqlSugarScope Db = new SqlSugarScope(connectionConfigs,
+    },
          db =>
          {
              db.QueryFilter.Add(new SqlFilterItem
@@ -73,8 +75,29 @@ public class DbContext
 
 }
 
+public static class DbExtension
+{
+
+    public static int ExecuteCommand<T>(this LogicDeleteProvider<T> deleteProvider, T deleteObject) where T : BaseEntity, new()
+    {
+        var db = deleteProvider.Deleteable.Context;
+        var where = deleteProvider.DeleteBuilder.GetWhereString[5..];
+        var pars = deleteProvider.DeleteBuilder.Parameters;
+
+        IUpdateable<T> updateable = db.Updateable<T>().SetColumns(nameof(BaseEntity.oust), deleteObject.id);
+        if (deleteObject.updator != null)
+            updateable.SetColumns(nameof(deleteObject.updator), deleteObject.updator);
+        if (pars != null)
+            updateable.UpdateBuilder.Parameters.AddRange(pars);
+        return updateable.Where(where).ExecuteCommand();
+    }
+}
+
+
 public abstract class BaseEntity
 {
+    public long id { get; init; }
+
     [SugarColumn(IsOnlyIgnoreUpdate = true)]
     public string creator { get; protected set; }
 

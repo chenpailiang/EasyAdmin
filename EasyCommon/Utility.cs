@@ -13,8 +13,9 @@ public static class Utility
     public static bool Nil(this string? str) => string.IsNullOrWhiteSpace(str);
     public static bool Nil(this IEnumerable list) => list == null || !list.GetEnumerator().MoveNext();
 
-    public static BadRequestException BadRequestExp(string msg) => new(msg);
+    public static BadRequestException BadRequest(string msg) => new(msg);
+    public static NotFoundException NotFound(string msg) => new(msg);
 
     public static DateTime Now() => DateTime.Now;
-    
+
 }

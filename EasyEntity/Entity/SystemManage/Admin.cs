@@ -7,7 +7,6 @@ namespace EasyEntity.Entity;
 
 public class Admin : AdminEntity
 {
-    public int id { get; init; }
     public string account { get; private set; }
     public string name { get; private set; }
     public string pwd { get; private set; }
@@ -15,7 +14,7 @@ public class Admin : AdminEntity
     public string memo { get; private set; }
 
     [SugarColumn(IsJson = true)]
-    public List<int>? roles { get; private set; }
+    public List<long>? roles { get; private set; }
 
     /// <summary>
     /// 新增
@@ -23,7 +22,7 @@ public class Admin : AdminEntity
     public void Create(CurrentUser currentUser)
     {
         if (db.Queryable<Admin>().Any(x => x.account == this.account))
-            throw BadRequestExp("账号已存在");
+            throw BadRequest("账号已存在");
         var letters = "qwertyuiopasdfghjklzxcvbnm";
         var nums = "1234567890";
         var chars = ",./!@#$&-+";
@@ -57,7 +56,7 @@ public class Admin : AdminEntity
     {
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
-            throw BadRequestExp("账号不存在");
+            throw NotFound("账号不存在");
         this.updator = currentUser.account;
         db.Updateable(this).UpdateColumns(x => new { x.name, x.email, x.memo, x.updator }).ExecuteCommand();
     }
@@ -69,8 +68,8 @@ public class Admin : AdminEntity
     {
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
-            throw BadRequestExp("账号不存在");
+            throw NotFound("账号不存在");
         this.updator = currentUser.account;
-        db.Deleteable(this).IsLogic().ExecuteCommand("oust", this.id);
+        db.Deleteable(this).IsLogic().ExecuteCommand(this);
     }
 }

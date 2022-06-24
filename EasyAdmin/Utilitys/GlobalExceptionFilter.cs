@@ -15,21 +15,16 @@ public class GlobalExceptionFilter : IExceptionFilter
     }
     public void OnException(ExceptionContext context)
     {
-        if (context.Exception is BadRequestException bad)
+        var ex = context.Exception;
+        (context.Result, context.HttpContext.Response.StatusCode) = ex switch
         {
-            context.Result = new ObjectResult(bad.Message);
-            context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-        }
-        if (context.Exception is UnauthorizedAccessException noAuth)
-        {
-            context.Result = new ObjectResult(noAuth.Message);
-            context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
-        }
-        else
-        {
-            context.Result = new ObjectResult("服务器异常 " + context.Exception.Message);
-            context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        }
+            BadRequestException => (GetResult(ex), StatusCodes.Status400BadRequest),
+            NotFoundException => (GetResult(ex), StatusCodes.Status404NotFound),
+            UnauthorizedAccessException => (GetResult(ex), StatusCodes.Status403Forbidden),
+            _ => (new ObjectResult(new { message = $"服务器异常:{ex.Message}" }), StatusCodes.Status500InternalServerError)
+        };
         context.ExceptionHandled = true;
     }
+
+    private ActionResult GetResult(Exception ex) => new ObjectResult(new { message = ex.Message });
 }

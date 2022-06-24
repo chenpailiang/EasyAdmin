@@ -62,12 +62,55 @@ public class EditFuncValidator : AbstractValidator<EditFuncReq>
 
 #region 用户管理
 
-public class AddAdminReqValidator : AbstractValidator<AddAdminReq>
+/// <summary>
+/// 新增用户
+/// </summary>
+public class AddAdminValidator : AbstractValidator<AddAdminReq>
 {
-    public AddAdminReqValidator()
+    public AddAdminValidator()
     {
         RuleFor(x => x.account).NotEmpty().Length(6, 10);
         RuleFor(x => x.name).NotEmpty().Length(2, 10);
+        RuleFor(x => x.email).NotEmpty().EmailAddress();
+        RuleFor(x => x.memo).NotEmpty().MaximumLength(50).When(x => x.memo != null);
+    }
+}
+
+/// <summary>
+/// 编辑用户
+/// </summary>
+public class EditAdminValidator : AbstractValidator<EditAdminReq>
+{
+    public EditAdminValidator()
+    {
+        RuleFor(x => x.id).GreaterThan(0);
+        RuleFor(x => x.name).NotEmpty().Length(2, 10);
+        RuleFor(x => x.email).NotEmpty().EmailAddress();
+        RuleFor(x => x.memo).NotEmpty().MaximumLength(50).When(x => x.memo != null);
+    }
+}
+#endregion
+
+#region 角色管理
+
+/// <summary>
+/// 新增角色
+/// </summary>
+public class AddRoleValidator : AbstractValidator<AddRoleReq>
+{
+    public AddRoleValidator()
+    {
+        RuleFor(x => x.name).NotEmpty().MaximumLength(20);
+        RuleFor(x => x.memo).NotEmpty().MaximumLength(50).When(x => x.memo != null);
+    }
+}
+
+public class EditRoleValidator : AbstractValidator<EditRoleReq>
+{
+    public EditRoleValidator(AddRoleValidator addRoleValidator)
+    {
+        Include(addRoleValidator);
+        RuleFor(x => x.id).GreaterThan(0);
     }
 }
 #endregion

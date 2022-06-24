@@ -10,7 +10,7 @@ namespace EasyService.Response;
 
 public class AdminDto : BaseDto
 {
-    public int id { get; set; }
+    public long id { get; set; }
     /// <summary>
     /// 账号
     /// </summary>
@@ -34,8 +34,8 @@ public class AdminDto : BaseDto
 
 public class MenuDto
 {
-    public int id { get; set; }
-    public int parentId { get; set; }
+    public long id { get; set; }
+    public long parentId { get; set; }
     /// <summary>
     /// 菜单名称
     /// </summary>
@@ -55,11 +55,11 @@ public class MenuDto
 }
 public class FuncDto
 {
-    public int id { get; init; }
+    public long id { get; init; }
     /// <summary>
     /// 菜单Id
     /// </summary>
-    public int menuId { get; private set; }
+    public long menuId { get; private set; }
     /// <summary>
     /// 功能名称
     /// </summary>
@@ -95,7 +95,7 @@ public class MenuRsp
 
 public class RoleDto : BaseDto
 {
-    public int id { get; set; }
+    public long id { get; set; }
     /// <summary>
     /// 角色名称
     /// </summary>

@@ -25,7 +25,7 @@ public class AdminService
     public AdminDto Get(int id)
     {
         var admin = Admin.db.Queryable<Admin>().IgnoreColumns(x => x.pwd).First(x => x.id == id);
-        if (admin == null) throw BadRequestExp("用户不存在");
+        if (admin == null) throw NotFound("用户不存在");
         return imapper.Map<AdminDto>(admin);
     }
 

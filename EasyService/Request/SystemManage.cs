@@ -4,7 +4,7 @@
 
 public class AddMenuReq
 {
-    public int parentId { get; set; }
+    public long parentId { get; set; }
     /// <summary>
     /// 菜单名称
     /// </summary>
@@ -25,7 +25,7 @@ public class AddMenuReq
 
 public class EditMenuReq : AddMenuReq
 {
-    public int id { get; set; }
+    public long id { get; set; }
 }
 
 public class AddFuncReq
@@ -33,7 +33,7 @@ public class AddFuncReq
     /// <summary>
     /// 菜单Id
     /// </summary>
-    public int menuId { get; set; }
+    public long menuId { get; set; }
     /// <summary>
     /// 功能名称
     /// </summary>
@@ -54,7 +54,7 @@ public class AddFuncReq
 
 public class EditFuncReq
 {
-    public int id { get; set; }
+    public long id { get; set; }
     /// <summary>
     /// 功能名称
     /// </summary>
@@ -105,7 +105,7 @@ public class AddAdminReq
 /// </summary>
 public class EditAdminReq
 {
-    public int id { get; set; }
+    public long id { get; set; }
     /// <summary>
     /// 名称
     /// </summary>
@@ -137,7 +137,7 @@ public class AddRoleReq
 
 public class EditRoleReq : AddRoleReq
 {
-    public int id { get; set; }
+    public long id { get; set; }
 }
 #endregion
 
