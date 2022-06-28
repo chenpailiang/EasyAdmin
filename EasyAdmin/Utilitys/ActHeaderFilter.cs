@@ -8,6 +8,7 @@ namespace EasyAdmin.Utilitys;
 /// <summary>
 /// swagger描述添加actid
 /// </summary>
+[Obsolete]
 public class ActHeaderFilter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)

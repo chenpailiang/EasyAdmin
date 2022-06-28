@@ -5,7 +5,7 @@ using System.Text;
 
 namespace EasyEntity.Entity;
 
-public class Admin : AdminEntity
+public class Admin : BaseEntity
 {
     public string account { get; private set; }
     public string name { get; private set; }
@@ -69,7 +69,6 @@ public class Admin : AdminEntity
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
             throw NotFound("账号不存在");
-        this.updator = currentUser.account;
-        db.Deleteable(this).IsLogic().ExecuteCommand(this);
+        db.Deleteable(this).IsLogic().ExecuteDelete(currentUser.account);
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EasyEntity.Entity;
 
-public class Role : AdminEntity
+public class Role : BaseEntity
 {
     public string name { get; private set; }
     public string memo { get; private set; }
@@ -51,7 +51,6 @@ public class Role : AdminEntity
     {
         if (!db.Queryable<Role>().Any(x => x.id == this.id))
             throw NotFound("角色不存在");
-        this.updator = currentUser.account;
-        db.Deleteable(this).IsLogic().ExecuteCommand(this);
+        db.Deleteable(this).IsLogic().ExecuteDelete(currentUser.account);
     }
 }

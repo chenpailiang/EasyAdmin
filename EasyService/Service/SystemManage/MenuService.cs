@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EasyCommon;
+using EasyEntity;
 using EasyEntity.Entity;
 using EasyService.Request;
 using EasyService.Response;
@@ -25,14 +26,14 @@ public class MenuService
         MenuRsp rsp = new();
         if (currentUser.isSuper)
             return GetMenus();
-        var roleIds = Admin.db.Queryable<Admin>().First(x => x.id == currentUser.id).roles;
+        var roleIds = DbContext.Db.Queryable<Admin>().First(x => x.id == currentUser.id).roles;
         if (roleIds == null) return rsp;
-        var roles = Role.db.Queryable<Role>().Where(x => roleIds.Contains(x.id)).ToList();
+        var roles = DbContext.Db.Queryable<Role>().Where(x => roleIds.Contains(x.id)).ToList();
         var menuIds = roles.SelectMany(x => x.menus).Distinct().ToList();
-        var menus = Menu.db.Queryable<Menu>().Where(x => menuIds.Contains(x.id)).OrderBy(x => x.sort).ToList();
+        var menus = DbContext.Db.Queryable<Menu>().Where(x => menuIds.Contains(x.id)).OrderBy(x => x.sort).ToList();
         rsp.menus = mapper.Map<List<MenuDto>>(menus);
         var funcIds = roles.SelectMany(x => x.funcs).Distinct().ToList();
-        var funcs = MenuFunc.db.Queryable<MenuFunc>().Where(x => funcIds.Contains(x.id)).ToList();
+        var funcs = DbContext.Db.Queryable<MenuFunc>().Where(x => funcIds.Contains(x.id)).ToList();
         rsp.funcs = mapper.Map<List<FuncDto>>(funcs);
         return rsp;
     }
@@ -43,10 +44,10 @@ public class MenuService
     /// <returns></returns>
     public MenuRsp GetMenus(string? name = null)
     {
-        MenuRsp rsp = new();
-        var menus = Menu.db.Queryable<Menu>().WhereIF(!name.Nil(), x => x.name.Contains(name!)).ToList();
+       MenuRsp rsp = new();
+        var menus = DbContext.Db.Queryable<Menu>().WhereIF(!name.Nil(), x => x.name.Contains(name!)).ToList();
         rsp.menus = mapper.Map<List<MenuDto>>(menus);
-        var funcs = MenuFunc.db.Queryable<MenuFunc>().ToList();
+        var funcs = DbContext.Db.Queryable<MenuFunc>().ToList();
         rsp.funcs = mapper.Map<List<FuncDto>>(funcs);
         return rsp;
     }

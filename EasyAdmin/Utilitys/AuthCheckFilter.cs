@@ -37,8 +37,7 @@ public class AuthCheckFilter : IAuthorizationFilter
                 try
                 {
                     var authIds = currentUser.auths;
-                    var req_authId = int.Parse(context.HttpContext.Request.Headers["aid"]);
-                    if (req_authId != authSet.authId || authIds == null || !authIds.Any(x => x == Utility.SuperAdmin || x == req_authId))
+                    if (authIds == null || !authIds.Any(x => x == Utility.SuperAdmin || x == authSet.authId))
                     {
                         context.HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
                         context.Result = new EmptyResult();

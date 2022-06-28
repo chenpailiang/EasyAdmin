@@ -4,6 +4,7 @@ using EasyEntity.Entity;
 using EasyService.Response;
 using EasyService.Request;
 using EasyCommon;
+using EasyEntity;
 
 namespace EasyService.Service;
 
@@ -24,7 +25,7 @@ public class AdminService
     /// <returns></returns>
     public AdminDto Get(int id)
     {
-        var admin = Admin.db.Queryable<Admin>().IgnoreColumns(x => x.pwd).First(x => x.id == id);
+        var admin = DbContext.Db.Queryable<Admin>().IgnoreColumns(x => x.pwd).First(x => x.id == id);
         if (admin == null) throw NotFound("用户不存在");
         return imapper.Map<AdminDto>(admin);
     }
@@ -35,7 +36,7 @@ public class AdminService
     /// <returns></returns>
     public List<AdminDto> GetAll()
     {
-        var admins = Admin.db.Queryable<Admin>().IgnoreColumns(x => x.pwd).ToList();
+        var admins = DbContext.Db.Queryable<Admin>().IgnoreColumns(x => x.pwd).ToList();
         return imapper.Map<List<AdminDto>>(admins);
     }
 

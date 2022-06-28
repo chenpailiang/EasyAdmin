@@ -65,7 +65,6 @@ builder.Services.AddSwaggerGen(s =>
         Version = "v1",
         Title = $"{currentAssemblyName} Api "
     });
-    s.OperationFilter<ActHeaderFilter>();
     s.OrderActionsBy(x => x.RelativePath);
     var basePath = AppDomain.CurrentDomain.BaseDirectory;
     s.IncludeXmlComments($"{basePath}EasyAdmin.xml", true);

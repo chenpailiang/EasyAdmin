@@ -4,10 +4,18 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace EasyEntity;
+
+public class DbId
+{
+    public const string Admin = "admin";
+    public const string Goods = "goods";
+    public const string Order = "order";
+}
 
 /// <summary>
 /// 
@@ -42,7 +50,7 @@ public class DbContext
     {
         new ConnectionConfig
         {
-            ConfigId = "admin",
+            ConfigId = DbId.Admin,
             DbType = SqlSugar.DbType.MySql,
             ConnectionString = dbConnectConfig.adminMaster,
             IsAutoCloseConnection = true,
@@ -50,7 +58,7 @@ public class DbContext
         },
         new ConnectionConfig
         {
-            ConfigId = "goods",
+            ConfigId = DbId.Goods,
             DbType = SqlSugar.DbType.MySql,
             ConnectionString = dbConnectConfig.goodsMaster,
             IsAutoCloseConnection = true,
@@ -77,19 +85,21 @@ public class DbContext
 
 public static class DbExtension
 {
-
-    public static int ExecuteCommand<T>(this LogicDeleteProvider<T> deleteProvider, T deleteObject) where T : BaseEntity, new()
+    public static SqlSugarProvider Getdb(this BaseEntity entity)
+    {
+        return DbContext.Db.GetConnection(DbId.Admin);
+    }
+    public static int ExecuteDelete<T>(this LogicDeleteProvider<T> deleteProvider, string updator) where T : BaseEntity, new()
     {
         var db = deleteProvider.Deleteable.Context;
         var where = deleteProvider.DeleteBuilder.GetWhereString[5..];
         var pars = deleteProvider.DeleteBuilder.Parameters;
-
-        IUpdateable<T> updateable = db.Updateable<T>().SetColumns(nameof(BaseEntity.oust), deleteObject.id);
-        if (deleteObject.updator != null)
-            updateable.SetColumns(nameof(deleteObject.updator), deleteObject.updator);
-        if (pars != null)
-            updateable.UpdateBuilder.Parameters.AddRange(pars);
-        return updateable.Where(where).ExecuteCommand();
+        var type = typeof(T);
+        var tableAttr = type.GetCustomAttribute<SugarTable>();
+        var table = tableAttr == null ? type.Name : tableAttr.TableName;
+        string sql = string.Format("UPDATE {0} SET {1}={2},{3}='{4}' WHERE {5}", table,
+            nameof(BaseEntity.oust), nameof(BaseEntity.id), nameof(BaseEntity.updator), updator, where);
+        return db.Ado.ExecuteCommand(sql, pars);
     }
 }
 
@@ -107,22 +117,16 @@ public abstract class BaseEntity
 
     [SugarColumn(IsOnlyIgnoreUpdate = true, IsOnlyIgnoreInsert = true)]
     public DateTime updateTime { get; init; }
-    public int oust { get; protected set; }
-}
+    public long oust { get; protected set; }
 
-public abstract class AdminEntity : BaseEntity
-{
-    public static readonly SqlSugarProvider db = DbContext.Db.GetConnection("admin");
-}
-
-public class GoodsEntity : BaseEntity
-{
-    public readonly SqlSugarProvider db = DbContext.Db.GetConnection("goods");
-}
-
-public class OrderEntity : BaseEntity
-{
-
-    public readonly SqlSugarProvider db = DbContext.Db.GetConnection("order");
-
+    [SugarColumn(IsIgnore = true)]
+    public SqlSugarProvider db
+    {
+        get
+        {
+            TenantAttribute? customAttribute = GetType().GetCustomAttribute<TenantAttribute>();
+            object configId = customAttribute == null ? DbId.Admin : customAttribute.configId;
+            return DbContext.Db.GetConnection(configId);
+        }
+    }
 }

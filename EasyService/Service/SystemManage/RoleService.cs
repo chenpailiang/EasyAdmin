@@ -4,6 +4,7 @@ using EasyEntity.Entity;
 using EasyService.Response;
 using EasyService.Request;
 using EasyCommon;
+using EasyEntity;
 
 namespace EasyService.Service;
 
@@ -24,7 +25,7 @@ public class RoleService
     /// <returns></returns>
     public List<RoleDto> Get()
     {
-        var admins = Role.db.Queryable<Role>().ToList();
+        var admins = DbContext.Db.Queryable<Role>().ToList();
         return imapper.Map<List<RoleDto>>(admins);
     }
 

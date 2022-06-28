@@ -1,4 +1,5 @@
 ﻿using EasyCommon;
+using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace EasyEntity.Entity;
 
-public class MenuFunc : AdminEntity
+[SugarTable("MenuFunc")]
+public class MenuFunc : BaseEntity
 {
     public long menuId { get; private set; }
     public string name { get; private set; }
@@ -47,8 +49,6 @@ public class MenuFunc : AdminEntity
     {
         if (!db.Queryable<MenuFunc>().Any(x => x.id == this.id))
             throw NotFound("功能不存在");
-        this.updator = currentUser.account;
-        db.Deleteable(this).IsLogic().ExecuteCommand(this);
+        db.Deleteable(this).IsLogic().ExecuteDelete(currentUser.account);
     }
-
 }
