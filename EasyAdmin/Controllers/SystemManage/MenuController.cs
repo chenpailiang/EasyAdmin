@@ -78,11 +78,18 @@ public class MenuController : BaseController
     }
 
     /// <summary>
+    /// 获取功能权限值
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet, Route("func/at"), AuthSet(AuthEnum.at131)]
+    public ActionResult<int[]> GetFuncAuth() => Ok(Utility.EnumToNumberList(typeof(AuthEnum)));
+
+    /// <summary>
     /// 新增功能
     /// </summary>
     /// <param name="req"></param>
     /// <returns></returns>
-    [HttpPost,Route("func"),AuthSet(AuthEnum.at131)]
+    [HttpPost, Route("func"), AuthSet(AuthEnum.at131)]
     public ActionResult AddFunc([FromBody] AddFuncReq req)
     {
         menuService.AddFunc(req);

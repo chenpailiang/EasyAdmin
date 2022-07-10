@@ -11,6 +11,7 @@ namespace EasyCommon;
 /// </summary>
 public enum AuthEnum : uint
 {
+
     /// <summary>
     /// 用户管理-查询
     /// </summary>
@@ -74,6 +75,4 @@ public enum AuthEnum : uint
     /// 菜单管理-删除功能
     /// </summary>
     at133 = 133,
-
-
 }

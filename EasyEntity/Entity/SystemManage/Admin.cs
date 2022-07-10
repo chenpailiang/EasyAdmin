@@ -44,8 +44,8 @@ public class Admin : BaseEntity
             sb.Append(chars[idx]);
         }
         this.pwd = sb.ToString();
-        this.creator = this.updator = currentUser.account;
-        db.Insertable(this).IgnoreColumns(x => x.roles).ExecuteCommand();
+        this.creator = currentUser.account;
+        db.Insertable(this).IgnoreColumns(x => x.roles).ExecuteInsert();
         EmailTool.SendEmailForNewAdmin(this.email, this.account, this.name, this.pwd);
     }
 
@@ -57,8 +57,7 @@ public class Admin : BaseEntity
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
             throw NotFound("账号不存在");
-        this.updator = currentUser.account;
-        db.Updateable(this).UpdateColumns(x => new { x.name, x.email, x.memo, x.updator }).ExecuteCommand();
+        db.Updateable(this).UpdateColumns(x => new { x.name, x.email, x.memo, x.updator }).ExecuteUpdate(currentUser);
     }
 
     /// <summary>
@@ -69,6 +68,6 @@ public class Admin : BaseEntity
         var admin = db.Queryable<Admin>().First(x => x.id == this.id);
         if (admin == null)
             throw NotFound("账号不存在");
-        db.Deleteable(this).IsLogic().ExecuteDelete(currentUser.account);
+        db.Updateable(this).ExecuteDelete(currentUser);
     }
 }

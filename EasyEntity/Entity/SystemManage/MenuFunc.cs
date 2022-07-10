@@ -24,8 +24,8 @@ public class MenuFunc : BaseEntity
     {
         if (db.Queryable<MenuFunc>().Any(x => x.menuId == this.menuId && x.symbol == this.symbol))
             throw BadRequest("功能已存在");
-        this.creator = this.updator = currentUser.account;
-        db.Insertable(this).ExecuteCommand();
+        this.creator = currentUser.account;
+        db.Insertable(this).ExecuteInsert();
     }
 
     /// <summary>
@@ -38,8 +38,8 @@ public class MenuFunc : BaseEntity
             throw NotFound("功能不存在");
         if (menus.Count > 1)
             throw BadRequest("功能名称已存在");
-        this.updator = currentUser.account;
-        db.Updateable(this).ExecuteCommand();
+        
+        db.Updateable(this).IgnoreColumns(x => x.menuId).ExecuteUpdate(currentUser);
     }
 
     /// <summary>
@@ -49,6 +49,6 @@ public class MenuFunc : BaseEntity
     {
         if (!db.Queryable<MenuFunc>().Any(x => x.id == this.id))
             throw NotFound("功能不存在");
-        db.Deleteable(this).IsLogic().ExecuteDelete(currentUser.account);
+        db.Updateable(this).ExecuteDelete(currentUser);
     }
 }

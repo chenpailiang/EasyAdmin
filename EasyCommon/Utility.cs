@@ -17,5 +17,14 @@ public static class Utility
     public static NotFoundException NotFound(string msg) => new(msg);
 
     public static DateTime Now() => DateTime.Now;
-
+    public static int[] EnumToNumberList(Type enumType) => (int[])Enum.GetValues(enumType);
+    public static Dictionary<int, string> EnumToDictionary(Type enumType)
+    {
+        Dictionary<int, string> dict = new();
+        foreach (var item in Enum.GetValues(enumType))
+        {
+            dict.Add(Convert.ToInt32(item), item.ToString());
+        }
+        return dict;
+    }
 }

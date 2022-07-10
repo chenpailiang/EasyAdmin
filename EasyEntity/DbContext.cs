@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace EasyEntity;
 
@@ -73,11 +74,25 @@ public class DbContext
                  FilterValue = it => new SqlFilterResult { Sql = "oust = 0" },
                  IsJoinQuery = false
              });
-             //单例参数配置，所有上下文生效
+             db.Aop.OnError = exp =>
+             {
+                 NLog.LogManager.GetLogger("SQLErrorLogger").Error("SQL:" + exp.Sql);
+             };
              db.Aop.OnLogExecuting = (sql, pars) =>
              {
-                 Console.WriteLine(sql);//输出sql
-                 Console.WriteLine(string.Join(",", pars?.Select(it => it.ParameterName + ":" + it.Value)));//参数
+                 Console.WriteLine("SQL:" + sql + "; Parameter: " + string.Join(",", pars.Select(it => it.ParameterName + ":" + it.Value)));
+             };
+             db.Aop.OnDiffLogEvent = it =>
+             {
+                 //var tableName = it.BusinessData.ToString();
+                 //var log = new
+                 //{
+                 //    tableName,
+                 //    changeType = it.DiffType.ToString(),
+                 //    sql = it.Sql,
+                 //    parameter = it.Parameters.Select(x => new { name = x.ParameterName, value = x.Value }),
+                 //};
+                 //NLog.LogManager.GetLogger($"SqlChangeLogger").Info(JsonConvert.SerializeObject(log));
              };
          });
 
@@ -89,17 +104,30 @@ public static class DbExtension
     {
         return DbContext.Db.GetConnection(DbId.Admin);
     }
-    public static int ExecuteDelete<T>(this LogicDeleteProvider<T> deleteProvider, string updator) where T : BaseEntity, new()
+
+    public static int ExecuteInsert<T>(this IInsertable<T> insertable) where T : BaseEntity, new()
     {
-        var db = deleteProvider.Deleteable.Context;
-        var where = deleteProvider.DeleteBuilder.GetWhereString[5..];
-        var pars = deleteProvider.DeleteBuilder.Parameters;
-        var type = typeof(T);
-        var tableAttr = type.GetCustomAttribute<SugarTable>();
-        var table = tableAttr == null ? type.Name : tableAttr.TableName;
-        string sql = string.Format("UPDATE {0} SET {1}={2},{3}='{4}' WHERE {5}", table,
-            nameof(BaseEntity.oust), nameof(BaseEntity.id), nameof(BaseEntity.updator), updator, where);
-        return db.Ado.ExecuteCommand(sql, pars);
+        var tableName = insertable.InsertBuilder.GetTableNameString;
+        return insertable.EnableDiffLogEvent().ExecuteCommand();
+
+    }
+    public static int ExecuteUpdate<T>(this IUpdateable<T> updateable, CurrentUser currentUser) where T : BaseEntity, new()
+    {
+        var tableName = updateable.UpdateBuilder.TableName;
+        if (updateable.UpdateParameterIsNull) // 表达式更新
+            return updateable.SetColumns(x => x.updator == currentUser.account).IgnoreColumns(x => x.oust).EnableDiffLogEvent(tableName).ExecuteCommand();
+        else  // 实体更新
+            return updateable.ReSetValue(x => x.updator = currentUser.account).IgnoreColumns(x => x.oust).EnableDiffLogEvent(tableName).ExecuteCommand();
+    }
+
+    public static int ExecuteDelete<T>(this IUpdateable<T> updateable, CurrentUser currentUser) where T : BaseEntity, new()
+    {
+        var tableName = updateable.UpdateBuilder.TableName;
+        if (updateable.UpdateParameterIsNull) // 表达式更新
+            return updateable.SetColumns(x => new T { oust = x.id, updator = currentUser.account }).EnableDiffLogEvent(tableName).ExecuteCommand();
+        else // 实体更新
+            return updateable.UpdateColumns(x => new { x.oust, x.updator }).ReSetValue(x => x.oust = x.id).ReSetValue(x => x.updator = currentUser.account)
+               .EnableDiffLogEvent(tableName).ExecuteCommand();
     }
 }
 
@@ -113,11 +141,13 @@ public abstract class BaseEntity
 
     [SugarColumn(IsOnlyIgnoreUpdate = true, IsOnlyIgnoreInsert = true)]
     public DateTime createTime { get; init; }
-    public string updator { get; protected set; }
+    public string updator { get; set; }
 
     [SugarColumn(IsOnlyIgnoreUpdate = true, IsOnlyIgnoreInsert = true)]
     public DateTime updateTime { get; init; }
-    public long oust { get; protected set; }
+
+    [SugarColumn(IsOnlyIgnoreInsert = true)]
+    public long oust { get; set; }
 
     [SugarColumn(IsIgnore = true)]
     public SqlSugarProvider db

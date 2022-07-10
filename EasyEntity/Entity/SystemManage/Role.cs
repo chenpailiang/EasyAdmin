@@ -26,8 +26,8 @@ public class Role : BaseEntity
     {
         if (db.Queryable<Role>().Any(x => x.name == this.name))
             throw BadRequest("角色已存在");
-        this.creator = this.updator = currentUser.account;
-        db.Insertable(this).ExecuteCommand();
+        this.creator =  currentUser.account;
+        db.Insertable(this).ExecuteInsert();
     }
 
     /// <summary>
@@ -40,8 +40,7 @@ public class Role : BaseEntity
             throw NotFound("角色不存在");
         if (roles.Count > 1)
             throw BadRequest("角色名称已存在");
-        this.updator = currentUser.account;
-        db.Updateable(this).ExecuteCommand();
+        db.Updateable(this).ExecuteUpdate(currentUser);
     }
 
     /// <summary>
@@ -51,6 +50,6 @@ public class Role : BaseEntity
     {
         if (!db.Queryable<Role>().Any(x => x.id == this.id))
             throw NotFound("角色不存在");
-        db.Deleteable(this).IsLogic().ExecuteDelete(currentUser.account);
+        db.Updateable(this).ExecuteDelete(currentUser);
     }
 }
