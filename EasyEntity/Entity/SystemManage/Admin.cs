@@ -70,4 +70,17 @@ public class Admin : BaseEntity
             throw NotFound("账号不存在");
         db.Updateable(this).ExecuteDelete(currentUser);
     }
+
+    /// <summary>
+    /// 添加角色
+    /// </summary>
+    /// <param name="roleId"></param>
+    public void AddRole(long roleId, CurrentUser currentUser)
+    {
+        if (roles == null)
+            roles = new List<long> { roleId };
+        else
+            roles.Add(roleId);
+        db.Updateable(this).UpdateColumns(x => x.roles).ExecuteUpdate(currentUser);
+    }
 }

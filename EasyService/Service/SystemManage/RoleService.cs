@@ -53,9 +53,52 @@ public class RoleService
     /// 删除角色
     /// </summary>
     /// <param name="id"></param>
-    public void DelRole(int id)
+    public void DelRole(long id)
     {
         var role = new Role { id = id };
         role.Delete(currentUser);
+    }
+
+    /// <summary>
+    /// 获取角色的菜单功能权限
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public RoleAuthDto GetAuth(long id)
+    {
+        RoleAuthDto rsp = new();
+        var menus = DbContext.Db.Queryable<Menu>().ToList();
+        rsp.menus = imapper.Map<List<MenuDto>>(menus);
+        var funcs = DbContext.Db.Queryable<MenuFunc>().ToList();
+        rsp.funcs = imapper.Map<List<RoleAuthDto.RoleFunc>>(funcs);
+        var role = DbContext.Db.Queryable<Role>().First(x => x.id == id);
+        foreach (var item in rsp.funcs)
+        {
+            if (role.funcs.Any(x => x == item.id))
+            {
+                item.HasAuth = true;
+            }
+        }
+        return rsp;
+    }
+
+    /// <summary>
+    /// 分配权限
+    /// </summary>
+    public void AssignAuth(long roleId, AssignRoleReq req)
+    {
+        var role = new Role { id = roleId };
+        role.AssignAuth(currentUser, req.menus, req.funcs);
+    }
+
+    /// <summary>
+    /// 用户分配角色
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <param name="req"></param>
+    public void SetToAdmin(long roleId, RoleSetToAdmin req)
+    {
+        var role = new Role { id = roleId };
+        role.SetToAdmin(currentUser, req.adminIds);
     }
 }

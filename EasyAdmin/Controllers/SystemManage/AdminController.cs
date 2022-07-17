@@ -81,4 +81,16 @@ public class AdminController : BaseController
         adminService.DelAdmin(id);
         return Ok();
     }
+
+    /// <summary>
+    /// 根据角色获取用户
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    [HttpGet, Route("role/{roleId}"), AuthSet(AuthEnum.at104)]
+    public ActionResult<RoleAdminDto> RoleAdmin(long roleId)
+    {
+        var rsp = adminService.RoleAdmin(roleId);
+        return Ok(rsp);
+    }
 }

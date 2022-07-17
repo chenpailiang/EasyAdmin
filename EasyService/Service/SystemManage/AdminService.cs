@@ -23,7 +23,7 @@ public class AdminService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public AdminDto Get(int id)
+    public AdminDto Get(long id)
     {
         var admin = DbContext.Db.Queryable<Admin>().IgnoreColumns(x => x.pwd).First(x => x.id == id);
         if (admin == null) throw NotFound("用户不存在");
@@ -64,9 +64,28 @@ public class AdminService
     /// 删除管理员
     /// </summary>
     /// <param name="id"></param>
-    public void DelAdmin(int id)
+    public void DelAdmin(long id)
     {
         var admin = new Admin { id = id };
         admin.Delete(currentUser);
+    }
+
+    /// <summary>
+    /// 根据角色获取用户
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <returns></returns>
+    public RoleAdminDto RoleAdmin(long roleId)
+    {
+        RoleAdminDto rsp = new() { HasAssign = new(), Others = new() };
+        var admins = DbContext.Db.Queryable<Admin>().Select(x => new { x.id, x.account, x.name, x.roles }).ToList();
+        foreach (var item in admins)
+        {
+            if (item.roles != null && item.roles.Contains(roleId))
+                rsp.HasAssign.Add(imapper.Map<AdminDto>(item));
+            else
+                rsp.Others.Add(imapper.Map<AdminDto>(item));
+        }
+        return rsp;
     }
 }

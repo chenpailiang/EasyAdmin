@@ -28,6 +28,10 @@ public enum AuthEnum : uint
     /// 用户管理-删除
     /// </summary>
     at103 = 103,
+    /// <summary>
+    /// 根据角色获取用户
+    /// </summary>
+    at104 = 104,
 
     /// <summary>
     /// 角色管理-查询
@@ -45,7 +49,14 @@ public enum AuthEnum : uint
     /// 角色管理-删除
     /// </summary>
     at113 = 113,
-
+    /// <summary>
+    /// 角色管理-给角色分配权限
+    /// </summary>
+    at114 = 114,
+    /// <summary>
+    /// 角色管理-给用户分配角色
+    /// </summary>
+    at115 = 115,
 
     /// <summary>
     /// 菜单管理-查询
@@ -63,6 +74,7 @@ public enum AuthEnum : uint
     /// 菜单管理-删除
     /// </summary>
     at123 = 123,
+
     /// <summary>
     /// 菜单管理-新增功能
     /// </summary>

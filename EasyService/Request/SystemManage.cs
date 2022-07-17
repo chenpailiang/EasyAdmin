@@ -123,6 +123,9 @@ public class EditAdminReq
 
 #region 角色管理
 
+/// <summary>
+/// 新增角色
+/// </summary>
 public class AddRoleReq
 {
     /// <summary>
@@ -135,9 +138,38 @@ public class AddRoleReq
     public string memo { get; set; }
 }
 
+/// <summary>
+/// 编辑角色
+/// </summary>
 public class EditRoleReq : AddRoleReq
 {
     public long id { get; set; }
+}
+
+/// <summary>
+/// 分配权限
+/// </summary>
+public class AssignRoleReq
+{
+    /// <summary>
+    /// 菜单Id集合
+    /// </summary>
+    public List<long> menus { get; set; }
+    /// <summary>
+    /// 功能Id集合
+    /// </summary>
+    public List<long> funcs { get; set; }
+}
+
+/// <summary>
+/// 用户分配角色
+/// </summary>
+public class RoleSetToAdmin
+{
+    /// <summary>
+    /// 用户Id集合
+    /// </summary>
+    public List<long> adminIds { get; set; }
 }
 #endregion
 

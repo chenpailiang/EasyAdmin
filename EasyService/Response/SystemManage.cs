@@ -28,6 +28,18 @@ public class AdminDto : BaseDto
     /// </summary>
     public string? memo { get; set; }
 }
+
+public class RoleAdminDto
+{
+    /// <summary>
+    /// 已分配用户
+    /// </summary>
+    public List<AdminDto> HasAssign { get; set; }
+    /// <summary>
+    /// 其他用户
+    /// </summary>
+    public List<AdminDto> Others { get; set; }
+}
 #endregion
 
 #region 菜单管理
@@ -104,5 +116,30 @@ public class RoleDto : BaseDto
     /// 备注
     /// </summary>
     public string memo { get; set; }
+}
+
+/// <summary>
+/// 角色权限
+/// </summary>
+public class RoleAuthDto
+{
+    /// <summary>
+    /// 菜单集合
+    /// </summary>
+    public List<MenuDto> menus { get; set; }
+    /// <summary>
+    /// 功能集合
+    /// </summary>
+    public List<RoleFunc> funcs { get; set; }
+    /// <summary>
+    /// 功能
+    /// </summary>
+    public class RoleFunc : FuncDto
+    {
+        /// <summary>
+        /// 是否有权限
+        /// </summary>
+        public bool HasAuth { get; set; }
+    }
 }
 #endregion

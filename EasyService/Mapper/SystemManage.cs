@@ -31,13 +31,14 @@ public class SystemManageProfile : Profile
 
         CreateMap<Menu, MenuDto>();
         CreateMap<MenuFunc, FuncDto>();
+        CreateMap<MenuFunc, RoleAuthDto.RoleFunc>();
         #endregion
 
         #region 角色管理
 
         CreateMap<AddRoleReq, Role>();
         CreateMap<EditRoleReq, Role>();
-        
+
         CreateMap<Role, RoleDto>();
         #endregion
     }

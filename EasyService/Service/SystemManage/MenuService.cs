@@ -76,7 +76,7 @@ public class MenuService
     /// 删除菜单
     /// </summary>
     /// <param name="id"></param>
-    public void DelMenu(int id)
+    public void DelMenu(long id)
     {
         var menu = new Menu { id = id };
         menu.Delete(currentUser);
@@ -106,7 +106,7 @@ public class MenuService
     /// 删除功能
     /// </summary>
     /// <param name="id"></param>
-    public void DelFunc(int id)
+    public void DelFunc(long id)
     {
         var func = new MenuFunc { id = id };
         func.Delete(currentUser);

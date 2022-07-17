@@ -71,7 +71,7 @@ public class MenuController : BaseController
     /// <param name="id">菜单Id</param>
     /// <returns></returns>
     [HttpDelete, Route("{id}"), AuthSet(AuthEnum.at123)]
-    public ActionResult DelMenu(int id)
+    public ActionResult DelMenu(long id)
     {
         menuService.DelMenu(id);
         return Ok();
@@ -114,7 +114,7 @@ public class MenuController : BaseController
     /// <param name="id">功能Id</param>
     /// <returns></returns>
     [HttpDelete, Route("func/{id}"), AuthSet(AuthEnum.at133)]
-    public ActionResult DelFunc(int id)
+    public ActionResult DelFunc(long id)
     {
         menuService.DelFunc(id);
         return Ok();

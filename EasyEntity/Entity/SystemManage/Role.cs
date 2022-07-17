@@ -26,7 +26,7 @@ public class Role : BaseEntity
     {
         if (db.Queryable<Role>().Any(x => x.name == this.name))
             throw BadRequest("角色已存在");
-        this.creator =  currentUser.account;
+        this.creator = currentUser.account;
         db.Insertable(this).ExecuteInsert();
     }
 
@@ -51,5 +51,30 @@ public class Role : BaseEntity
         if (!db.Queryable<Role>().Any(x => x.id == this.id))
             throw NotFound("角色不存在");
         db.Updateable(this).ExecuteDelete(currentUser);
+    }
+
+    /// <summary>
+    /// 分配权限
+    /// </summary>
+    public void AssignAuth(CurrentUser currentUser, List<long> menus, List<long> funcs)
+    {
+        if (!db.Queryable<Role>().Any(x => x.id == this.id))
+            throw NotFound("角色不存在");
+        this.menus = menus;
+        this.funcs = funcs;
+        db.Updateable(this).ExecuteUpdate(currentUser);
+    }
+
+    public void SetToAdmin(CurrentUser currentUser, List<long> adminIds)
+    {
+        if (!db.Queryable<Role>().Any(x => x.id == this.id))
+            throw NotFound("角色不存在");
+        var admins = db.Queryable<Admin>().Where(x => adminIds.Contains(x.id)).ToList();
+        db.Ado.BeginTran();
+        foreach (var item in admins)
+        {
+            item.AddRole(id, currentUser);
+        }
+        db.Ado.CommitTran();
     }
 }

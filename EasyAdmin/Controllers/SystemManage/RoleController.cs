@@ -30,7 +30,7 @@ public class RoleController : BaseController
     /// 查询角色列表
     /// </summary>
     /// <returns></returns>
-    [HttpGet, Route("{name?}"),AuthSet(AuthEnum.at110)]
+    [HttpGet, Route("{name?}"), AuthSet(AuthEnum.at110)]
     public ActionResult<List<RoleDto>> Get()
     {
         return roleService.Get();
@@ -66,9 +66,48 @@ public class RoleController : BaseController
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete, Route(""), AuthSet(AuthEnum.at113)]
-    public ActionResult DelRole(int id)
+    public ActionResult DelRole(long id)
     {
         roleService.DelRole(id);
+        return Ok();
+    }
+
+
+    /// <summary>
+    /// 获取角色具有的菜单功能权限
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet, Route("{id}/auth"), AuthSet()]
+    public ActionResult<RoleAuthDto> GetAuth(long id)
+    {
+        var rsp = roleService.GetAuth(id);
+        return Ok(rsp);
+    }
+
+    /// <summary>
+    /// 分配权限
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <param name="req"></param>
+    /// <returns></returns>
+    [HttpPost, Route("{roleId}/auth"), AuthSet(AuthEnum.at114)]
+    public ActionResult AssignAuth(long roleId, AssignRoleReq req)
+    {
+        roleService.AssignAuth(roleId, req);
+        return Ok();
+    }
+
+    /// <summary>
+    /// 给用户分配角色
+    /// </summary>
+    /// <param name="roleId"></param>
+    /// <param name="req"></param>
+    /// <returns></returns>
+    [HttpPost, Route("{role}/toAdmin"), AuthSet(AuthEnum.at115)]
+    public ActionResult SetToAdmin(long roleId, RoleSetToAdmin req)
+    {
+        roleService.SetToAdmin(roleId, req);
         return Ok();
     }
 }
